@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Siddhu Personal AI</title>
+
+    <style>
+
+        body{
+            margin:0;
+            padding:0;
+            background:#0f0f0f;
+            font-family:Arial, sans-serif;
+            color:white;
+        }
+
+        .container{
+            width:100%;
+            max-width:1000px;
+            margin:auto;
+            height:100vh;
+            display:flex;
+            flex-direction:column;
+        }
+
+        .header{
+            padding:25px;
+            font-size:35px;
+            font-weight:bold;
+            border-bottom:1px solid #333;
+        }
+
+        #chat{
+            flex:1;
+            overflow-y:auto;
+            padding:20px;
+        }
+
+        .user{
+            background:#2563eb;
+            padding:14px;
+            border-radius:15px;
+            margin:12px 0;
+            width:fit-content;
+            max-width:70%;
+            margin-left:auto;
+            word-wrap:break-word;
+        }
+
+        .ai{
+            background:#222;
+            padding:14px;
+            border-radius:15px;
+            margin:12px 0;
+            width:fit-content;
+            max-width:70%;
+            word-wrap:break-word;
+        }
+
+        .input-area{
+            display:flex;
+            gap:10px;
+            padding:20px;
+            border-top:1px solid #333;
+        }
+
+        input{
+            flex:1;
+            padding:16px;
+            border:none;
+            border-radius:12px;
+            background:#1f1f1f;
+            color:white;
+            font-size:16px;
+            outline:none;
+        }
+
+        button{
+            border:none;
+            border-radius:12px;
+            background:#2563eb;
+            color:white;
+            padding:16px 22px;
+            font-size:18px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            opacity:0.9;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        🔥 Siddhu Personal AI
+    </div>
+
+    <div id="chat"></div>
+
+    <div class="input-area">
+
+        <input
+            type="text"
+            id="message"
+            placeholder="Ask anything..."
+        >
+
+        <button onclick="startVoice()">
+            🎤
+        </button>
+
+        <button onclick="sendMessage()">
+            Send
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const BACKEND_URL =
+"https://pouncing-handiness-geometry.ngrok-free.dev/chat";
+
+async function sendMessage(){
+
+    let input = document.getElementById("message");
+
+    let message = input.value;
+
+    if(message.trim() === ""){
+        return;
+    }
+
+    let chat = document.getElementById("chat");
+
+    chat.innerHTML += `
+        <div class="user">
+            ${message}
+        </div>
+    `;
+
+    input.value = "";
+
+    chat.scrollTop = chat.scrollHeight;
+
+    try{
+
+        let response = await fetch(
+            BACKEND_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+                    message:message
+                })
+            }
+        );
+
+        let data = await response.json();
+
+        chat.innerHTML += `
+            <div class="ai">
+                ${data.response}
+            </div>
+        `;
+
+        let speech = new SpeechSynthesisUtterance(
+            data.response
+        );
+
+        speech.lang = "en-US";
+
+        window.speechSynthesis.speak(speech);
+
+        chat.scrollTop = chat.scrollHeight;
+
+    }
+    catch(error){
+
+        chat.innerHTML += `
+            <div class="ai">
+                Error connecting to AI backend.
+            </div>
+        `;
+    }
+}
+
+function startVoice(){
+
+    const recognition =
+    new webkitSpeechRecognition();
+
+    recognition.lang = "en-US";
+
+    recognition.start();
+
+    recognition.onresult = function(event){
+
+        let text =
+        event.results[0][0].transcript;
+
+        document.getElementById("message").value =
+        text;
+
+        sendMessage();
+    };
+}
+
+</script>
+
+</body>
+</html>
