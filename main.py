@@ -1,15 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from openai import OpenAI
+from groq import Groq
 import os
 
 # =========================
-# OPENAI CLIENT
+# GROQ CLIENT
 # =========================
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
+client = Groq(
+    api_key=os.getenv("GROQ_API_KEY")
 )
 
 # =========================
@@ -44,18 +44,21 @@ class ChatRequest(BaseModel):
 @app.post("/chat")
 def chat(request: ChatRequest):
 
-    user_message = request.message
-
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+
+        model="llama3-8b-8192",
+
         messages=[
+
             {
                 "role": "system",
-                "content": "You are Brain AI, a smart and friendly AI assistant created by Siddhu."
+                "content":
+                "You are Brain AI, a smart and friendly AI assistant created by Siddhu."
             },
+
             {
                 "role": "user",
-                "content": user_message
+                "content": request.message
             }
         ]
     )
@@ -72,6 +75,7 @@ def chat(request: ChatRequest):
 
 @app.get("/")
 def home():
+
     return {
         "message": "Brain AI Backend Running"
     }
