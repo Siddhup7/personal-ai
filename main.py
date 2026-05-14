@@ -1,81 +1,105 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+
+from pydantic import BaseModel
+
 import requests
 import mysql.connector
-from datetime import datetime
 
+# =========================
+# FASTAPI APP
+# =========================
+
+app = FastAPI()
+
+# =========================
+# CORS
+# =========================
+
+app.add_middleware(
+
+    CORSMiddleware,
+
+    allow_origins=["*"],
+
+    allow_credentials=True,
+
+    allow_methods=["*"],
+
+    allow_headers=["*"],
+)
+
+# =========================
 # MYSQL CONNECTION
+# =========================
+
 db = mysql.connector.connect(
+
     host="localhost",
+
     user="root",
+
     password="Siddhu*2006",
+
     database="personal_ai"
 )
 
 cursor = db.cursor()
 
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# =========================
+# REQUEST MODEL
+# =========================
 
 class ChatRequest(BaseModel):
+
     message: str
 
-@app.get("/")
-def home():
-    return {
-        "message": "Personal AI Running"
-    }
+# =========================
+# CHAT ENDPOINT
+# =========================
 
 @app.post("/chat")
+
 def chat(request: ChatRequest):
 
-    # Load recent memory
-    cursor.execute("""
-        SELECT user_message, ai_response
-        FROM memory
-        ORDER BY id DESC
-        LIMIT 5
-    """)
+    user_message = request.message
 
-    rows = cursor.fetchall()
+    # =========================
+    # SAVE USER MESSAGE
+    # =========================
 
-    memory_text = ""
+    cursor.execute(
 
-    for row in rows:
-        memory_text += f"""
-User: {row[0]}
-AI: {row[1]}
-"""
+        """
+        INSERT INTO memory
+        (message, role)
 
-    # System prompt
-    system_prompt = f"""
-You are Siddhu's personal AI assistant.
+        VALUES
+        (%s, %s)
+        """,
 
-Be smart, friendly, and conversational.
+        (
+            user_message,
+            "user"
+        )
+    )
 
-Remember previous conversations.
+    db.commit()
 
-Today's date is:
-{datetime.now().strftime("%d %B %Y")}
-"""
+    # =========================
+    # OLLAMA REQUEST
+    # =========================
 
-    # Final prompt
-    prompt = system_prompt + "\n" + memory_text + f"\nUser: {request.message}"
-
-    # Ask Ollama
     response = requests.post(
+
         "http://localhost:11434/api/generate",
+
         json={
-            "model": "phi3",
-            "prompt": prompt,
+
+            "model": "llama3",
+
+            "prompt": user_message,
+
             "stream": False
         }
     )
@@ -84,19 +108,33 @@ Today's date is:
 
     ai_response = data["response"]
 
-    # Save memory
-    sql = """
+    # =========================
+    # SAVE AI RESPONSE
+    # =========================
+
+    cursor.execute(
+
+        """
         INSERT INTO memory
-        (user_message, ai_response)
-        VALUES (%s, %s)
-    """
+        (message, role)
 
-    values = (request.message, ai_response)
+        VALUES
+        (%s, %s)
+        """,
 
-    cursor.execute(sql, values)
+        (
+            ai_response,
+            "assistant"
+        )
+    )
 
     db.commit()
 
+    # =========================
+    # RETURN RESPONSE
+    # =========================
+
     return {
+
         "response": ai_response
     }

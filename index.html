@@ -1,97 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Siddhu Personal AI</title>
+    <title>
+        Siddhu Personal AI
+    </title>
 
     <style>
 
-        body{
-            margin:0;
-            padding:0;
-            background:#0f0f0f;
-            font-family:Arial, sans-serif;
-            color:white;
+        body {
+
+            background: black;
+            color: white;
+            font-family: Arial;
+
+            margin: 0;
+            padding: 0;
         }
 
-        .container{
-            width:100%;
-            max-width:1000px;
-            margin:auto;
-            height:100vh;
-            display:flex;
-            flex-direction:column;
+        .container {
+
+            width: 80%;
+            margin: auto;
+            padding-top: 30px;
         }
 
-        .header{
-            padding:25px;
-            font-size:35px;
-            font-weight:bold;
-            border-bottom:1px solid #333;
+        h1 {
+
+            color: white;
+            text-align: center;
         }
 
-        #chat{
-            flex:1;
-            overflow-y:auto;
-            padding:20px;
+        #chatbox {
+
+            height: 500px;
+
+            border: 1px solid #444;
+
+            padding: 20px;
+
+            overflow-y: auto;
+
+            margin-bottom: 20px;
+
+            border-radius: 10px;
+
+            background: #111;
         }
 
-        .user{
-            background:#2563eb;
-            padding:14px;
-            border-radius:15px;
-            margin:12px 0;
-            width:fit-content;
-            max-width:70%;
-            margin-left:auto;
-            word-wrap:break-word;
+        .input-area {
+
+            display: flex;
+            gap: 10px;
         }
 
-        .ai{
-            background:#222;
-            padding:14px;
-            border-radius:15px;
-            margin:12px 0;
-            width:fit-content;
-            max-width:70%;
-            word-wrap:break-word;
+        input {
+
+            flex: 1;
+
+            padding: 15px;
+
+            font-size: 18px;
+
+            background: #1e1e1e;
+
+            color: white;
+
+            border: 1px solid #555;
+
+            border-radius: 10px;
+
+            outline: none;
         }
 
-        .input-area{
-            display:flex;
-            gap:10px;
-            padding:20px;
-            border-top:1px solid #333;
+        button {
+
+            padding: 15px 25px;
+
+            font-size: 18px;
+
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 10px;
+
+            cursor: pointer;
         }
 
-        input{
-            flex:1;
-            padding:16px;
-            border:none;
-            border-radius:12px;
-            background:#1f1f1f;
-            color:white;
-            font-size:16px;
-            outline:none;
+        button:hover {
+
+            background: #1d4ed8;
         }
 
-        button{
-            border:none;
-            border-radius:12px;
-            background:#2563eb;
-            color:white;
-            padding:16px 22px;
-            font-size:18px;
-            cursor:pointer;
-        }
+        p {
 
-        button:hover{
-            opacity:0.9;
+            line-height: 1.6;
         }
 
     </style>
@@ -102,11 +109,11 @@
 
 <div class="container">
 
-    <div class="header">
+    <h1>
         🔥 Siddhu Personal AI
-    </div>
+    </h1>
 
-    <div id="chat"></div>
+    <div id="chatbox"></div>
 
     <div class="input-area">
 
@@ -114,6 +121,7 @@
             type="text"
             id="message"
             placeholder="Ask anything..."
+            onkeypress="handleEnter(event)"
         >
 
         <button onclick="startVoice()">
@@ -131,95 +139,132 @@
 <script>
 
 const BACKEND_URL =
-"https://pouncing-handiness-geometry.ngrok-free.dev/chat";
+"https://pouncing-handiness-geometry.ngrok-free.dev/chat"
 
-async function sendMessage(){
+async function sendMessage() {
 
-    let input = document.getElementById("message");
+    let messageInput =
+        document.getElementById(
+            "message"
+        )
 
-    let message = input.value;
+    let message =
+        messageInput.value
 
-    if(message.trim() === ""){
-        return;
+    if (message.trim() === "") {
+
+        return
     }
 
-    let chat = document.getElementById("chat");
+    let chatbox =
+        document.getElementById(
+            "chatbox"
+        )
 
-    chat.innerHTML += `
-        <div class="user">
-            ${message}
-        </div>
-    `;
+    // USER MESSAGE
 
-    input.value = "";
+    chatbox.innerHTML += `
+        <p>
+            <b>You:</b> ${message}
+        </p>
+    `
 
-    chat.scrollTop = chat.scrollHeight;
+    // AI MESSAGE
 
-    try{
+    let aiMessage =
+        document.createElement("p")
 
-        let response = await fetch(
+    aiMessage.innerHTML =
+        "<b>AI:</b> "
+
+    chatbox.appendChild(
+        aiMessage
+    )
+
+    // CLEAR INPUT
+
+    messageInput.value = ""
+
+    try {
+
+        // FETCH STREAM
+
+        const response = await fetch(
             BACKEND_URL,
             {
-                method:"POST",
+                method: "POST",
 
-                headers:{
-                    "Content-Type":"application/json"
+                headers: {
+                    "Content-Type":
+                    "application/json"
                 },
 
-                body:JSON.stringify({
-                    message:message
+                body: JSON.stringify({
+                    message: message
                 })
             }
-        );
+        )
 
-        let data = await response.json();
+        const reader =
+            response.body.getReader()
 
-        chat.innerHTML += `
-            <div class="ai">
-                ${data.response}
-            </div>
-        `;
+        const decoder =
+            new TextDecoder()
 
-        let speech = new SpeechSynthesisUtterance(
-            data.response
-        );
+        while (true) {
 
-        speech.lang = "en-US";
+            const {
+                done,
+                value
+            } = await reader.read()
 
-        window.speechSynthesis.speak(speech);
+            if (done) break
 
-        chat.scrollTop = chat.scrollHeight;
+            const chunk =
+                decoder.decode(value)
 
-    }
-    catch(error){
+            aiMessage.innerHTML += chunk
 
-        chat.innerHTML += `
-            <div class="ai">
-                Error connecting to AI backend.
-            </div>
-        `;
+            chatbox.scrollTop =
+                chatbox.scrollHeight
+        }
+
+    } catch (error) {
+
+        aiMessage.innerHTML +=
+            " Server error or backend offline."
     }
 }
 
-function startVoice(){
+function startVoice() {
 
-    const recognition =
-    new webkitSpeechRecognition();
+    let recognition =
+        new webkitSpeechRecognition()
 
-    recognition.lang = "en-US";
+    recognition.lang = "en-US"
 
-    recognition.start();
-
-    recognition.onresult = function(event){
+    recognition.onresult = function(event) {
 
         let text =
-        event.results[0][0].transcript;
+            event.results[0][0]
+            .transcript
 
-        document.getElementById("message").value =
-        text;
+        document.getElementById(
+            "message"
+        ).value = text
 
-        sendMessage();
-    };
+        sendMessage()
+    }
+
+    recognition.start()
+}
+
+function handleEnter(event) {
+
+    if (event.key === "Enter") {
+
+        sendMessage()
+    }
 }
 
 </script>

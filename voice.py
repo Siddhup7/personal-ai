@@ -1,123 +1,85 @@
 import speech_recognition as sr
 import pyttsx3
-import requests
-import threading
 
 # =========================
-# AI Voice Assistant
+# INIT TEXT TO SPEECH
 # =========================
 
-BACKEND_URL = "http://127.0.0.1:8000/chat"
-
-# Initialize text-to-speech engine
 engine = pyttsx3.init()
 
-# Voice settings
-engine.setProperty("rate", 170)
-engine.setProperty("volume", 1)
+# =========================
+# VOICE SETTINGS
+# =========================
 
-# Initialize recognizer
-recognizer = sr.Recognizer()
+voices = engine.getProperty(
+    "voices"
+)
 
-# Prevent overlapping speech
-speaking = False
+engine.setProperty(
+    "voice",
+    voices[0].id
+)
 
+engine.setProperty(
+    "rate",
+    180
+)
+
+# =========================
+# SPEAK FUNCTION
+# =========================
 
 def speak(text):
-    global speaking
 
-    speaking = True
-
-    print(f"\nAI: {text}")
+    print(
+        "AI:",
+        text
+    )
 
     engine.say(text)
+
     engine.runAndWait()
 
-    speaking = False
-
-
-def ask_ai(message):
-
-    try:
-
-        response = requests.post(
-            BACKEND_URL,
-            json={
-                "message": message
-            },
-            timeout=120
-        )
-
-        data = response.json()
-
-        return data.get("response", "No response from AI.")
-
-    except Exception as e:
-
-        return f"Backend Error: {str(e)}"
-
+# =========================
+# LISTEN FUNCTION
+# =========================
 
 def listen():
 
+    recognizer = sr.Recognizer()
+
     with sr.Microphone() as source:
-
-        print("\n🎤 Listening...")
-
-        recognizer.adjust_for_ambient_noise(source, duration=1)
-
-        audio = recognizer.listen(source)
-
-        text = recognizer.recognize_google(audio)
-
-        return text
-
-
-def main():
-
-    print("=" * 50)
-    print("🔥 Siddhu Personal Voice AI Started")
-    print("Say 'exit' to stop")
-    print("=" * 50)
-
-    speak("Hello Siddhu. Your personal AI assistant is ready.")
-
-    while True:
 
         try:
 
-            user_text = listen()
+            recognizer.adjust_for_ambient_noise(
+                source,
+                duration=0.5
+            )
 
-            print(f"\nYou: {user_text}")
+            audio = recognizer.listen(
+                source,
+                timeout=5,
+                phrase_time_limit=5
+            )
 
-            if user_text.lower() in ["exit", "quit", "stop"]:
+        except:
 
-                speak("Shutting down. Goodbye Siddhu.")
+            return ""
 
-                break
+    try:
 
-            ai_response = ask_ai(user_text)
+        text = recognizer.recognize_google(
+            audio
+        )
 
-            speak(ai_response)
+        print(
+            "You said:",
+            text
+        )
 
-        except sr.UnknownValueError:
+        return text
 
-            print("\nCould not understand audio.")
+    except:
 
-        except sr.RequestError:
-
-            print("\nSpeech recognition service error.")
-
-        except KeyboardInterrupt:
-
-            print("\nExiting...")
-
-            break
-
-        except Exception as e:
-
-            print(f"\nError: {str(e)}")
-
-
-if __name__ == "__main__":
-
-    main()
+        return ""

@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+requests
+mysql-connector-python
+googlesearch-python
+pyautogui
+pygetwindow
+pillow
+opencv-python
+pytesseract
+sentence-transformers
+faiss-cpu
+torch
+numpy
+pydantic
+speechrecognition
+pyttsx3

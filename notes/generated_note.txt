@@ -1,0 +1,14 @@
+
+**Note on Python Object-Oriented Programming (OOP):**
+
+Python is an object-oriented programming language which means that everything in the language represents objects. At its core, each item can be thought of as having properties and behaviors - this encapsulte into data structures known as classes with attributes for storing states and methods to perform actions on these entities. When writing Python code using OOP concepts like inheritance (deriving new class from existing ones), polymorphism (using same interface but different underlying forms) or abstraction (hiding complex operations behind simple interfaces); it leads to a more organized, reusable, readable, and manageable codebase that can model real-world problems. In Python, we create classes using the `class` keyword followed by defining attributes with `__init__()` constructor method for initialization purposes and then define methods within them which represent actions related to instances of those classes (objects).
+
+For example: 
+```python
+   class Animal():
+       def __init__(self, species): #constructor or initializer function that takes self as first parameter. This tells the object how it can be initialized when an instance is created from this particular blueprint/class definition onwards and allows us to set attributes specific for each type of objects during creation time itself based on our needs
+           self.species = species  #attribute containing data belonging solely to that object or 'this' one-instance at a time only, not the class as whole (inheritance)
+       
+       def speak(self):   #method represents an action which will be performed by objects of this particular blueprint/class definition onwards from hereon. Each object can call their own method to perform specific actions based on attributes they hold at any moment in time 
+           pass     
+```
