@@ -43,7 +43,7 @@ export default function App() {
 
       const response =
         await fetch(
-          "http://127.0.0.1:8000/chat",
+          "https://personal-ai-k3rx.onrender.com/chat",
           {
 
             method: "POST",
