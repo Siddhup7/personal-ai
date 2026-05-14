@@ -1,14 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from pydantic import BaseModel
-
-import requests
-import mysql.connector
-
-# =========================
-# FASTAPI APP
-# =========================
 
 app = FastAPI()
 
@@ -30,23 +22,6 @@ app.add_middleware(
 )
 
 # =========================
-# MYSQL CONNECTION
-# =========================
-
-db = mysql.connector.connect(
-
-    host="localhost",
-
-    user="root",
-
-    password="Siddhu*2006",
-
-    database="personal_ai"
-)
-
-cursor = db.cursor()
-
-# =========================
 # REQUEST MODEL
 # =========================
 
@@ -64,77 +39,24 @@ def chat(request: ChatRequest):
 
     user_message = request.message
 
-    # =========================
-    # SAVE USER MESSAGE
-    # =========================
+    return {
 
-    cursor.execute(
+        "response":
 
-        """
-        INSERT INTO memory
-        (message, role)
+        f"Brain AI received: {user_message}"
+    }
 
-        VALUES
-        (%s, %s)
-        """,
+# =========================
+# ROOT
+# =========================
 
-        (
-            user_message,
-            "user"
-        )
-    )
+@app.get("/")
 
-    db.commit()
-
-    # =========================
-    # OLLAMA REQUEST
-    # =========================
-
-    response = requests.post(
-
-        "http://localhost:11434/api/generate",
-
-        json={
-
-            "model": "llama3",
-
-            "prompt": user_message,
-
-            "stream": False
-        }
-    )
-
-    data = response.json()
-
-    ai_response = data["response"]
-
-    # =========================
-    # SAVE AI RESPONSE
-    # =========================
-
-    cursor.execute(
-
-        """
-        INSERT INTO memory
-        (message, role)
-
-        VALUES
-        (%s, %s)
-        """,
-
-        (
-            ai_response,
-            "assistant"
-        )
-    )
-
-    db.commit()
-
-    # =========================
-    # RETURN RESPONSE
-    # =========================
+def home():
 
     return {
 
-        "response": ai_response
+        "message":
+
+        "Brain AI Backend Running"
     }
