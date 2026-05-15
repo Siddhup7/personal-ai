@@ -6,6 +6,8 @@ import os
 
 app = FastAPI()
 
+# CORS FIX
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -14,36 +16,43 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class ChatRequest(BaseModel):
-    message: str
+# GROQ CLIENT
 
 client = Groq(
     api_key=os.environ.get("GROQ_API_KEY")
 )
 
+# REQUEST MODEL
+
+class ChatRequest(BaseModel):
+    message: str
+
+# HOME ROUTE
+
 @app.get("/")
 def home():
-    return {"message": "Brain AI Running"}
+    return {
+        "message": "Brain AI Running"
+    }
+
+# CHAT ROUTE
 
 @app.post("/chat")
-def chat(request: ChatRequest):
+async def chat(request: ChatRequest):
+
+    user_message = request.message
 
     completion = client.chat.completions.create(
         model="llama3-8b-8192",
+
         messages=[
             {
-                "role": "system",
-                "content": "You are Brain AI created by Siddhu."
-            },
-            {
                 "role": "user",
-                "content": request.message
+                "content": user_message
             }
         ]
     )
 
-    reply = completion.choices[0].message.content
+    ai_reply = completion.choices[0].message.content
 
-    return {
-        "response": reply
-    }
+    return ai_reply
