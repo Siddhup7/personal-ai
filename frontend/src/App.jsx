@@ -39,16 +39,34 @@ function App() {
                 }
             );
 
-            const data = await response.json();
+            // SAFE RESPONSE
+            const text = await response.text();
+
+            console.log(text);
+
+            let data;
+
+            try {
+
+                data = JSON.parse(text);
+
+            } catch {
+
+                data = {
+                    response: text
+                };
+            }
 
             const aiMessage = {
                 sender: "AI",
-                text: data.response || JSON.stringify(data)
+                text: data.response || "No response from AI"
             };
 
             setChat(prev => [...prev, aiMessage]);
 
         } catch (error) {
+
+            console.log(error);
 
             const errorMessage = {
                 sender: "AI",
