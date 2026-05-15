@@ -15,36 +15,49 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# GROQ CLIENT
 client = Groq(
     api_key=os.environ.get("GROQ_API_KEY")
 )
 
+# REQUEST MODEL
 class Message(BaseModel):
     message: str
 
+# HOME ROUTE
 @app.get("/")
 def home():
+
     return {
         "message": "Brain AI Running"
     }
 
+# CHAT ROUTE
 @app.post("/chat")
 async def chat(data: Message):
 
-    user_message = data.message
+    try:
 
-    completion = client.chat.completions.create(
-        model="llama3-8b-8192",
-        messages=[
-            {
-                "role": "user",
-                "content": user_message
-            }
-        ]
-    )
+        user_message = data.message
 
-    ai_reply = completion.choices[0].message.content
+        completion = client.chat.completions.create(
+            model="llama3-8b-8192",
+            messages=[
+                {
+                    "role": "user",
+                    "content": user_message
+                }
+            ]
+        )
 
-    return {
-        "response": ai_reply
-    }
+        ai_reply = completion.choices[0].message.content
+
+        return {
+            "response": ai_reply
+        }
+
+    except Exception as e:
+
+        return {
+            "response": f"Error: {str(e)}"
+        }
