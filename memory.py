@@ -1,6 +1,26 @@
 from database import cursor, db
 
 # =========================
+# CREATE PROFILE TABLE
+# =========================
+
+cursor.execute("""
+
+CREATE TABLE IF NOT EXISTS profile_memory (
+
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    memory_key VARCHAR(255),
+
+    memory_value TEXT
+
+)
+
+""")
+
+db.commit()
+
+# =========================
 # SAVE PROFILE MEMORY
 # =========================
 
@@ -19,7 +39,10 @@ def save_profile_memory(user_message):
             INSERT INTO profile_memory
             (memory_key, memory_value)
             VALUES (%s, %s)
-        """, ("name", name))
+        """, (
+            "name",
+            name
+        ))
 
         db.commit()
 
@@ -52,7 +75,10 @@ def save_profile_memory(user_message):
             INSERT INTO profile_memory
             (memory_key, memory_value)
             VALUES (%s, %s)
-        """, ("goal", goal))
+        """, (
+            "goal",
+            goal
+        ))
 
         db.commit()
 
@@ -100,7 +126,7 @@ def save_conversation(
     db.commit()
 
 # =========================
-# LOAD RECENT CONVERSATION
+# LOAD RECENT CONVERSATIONS
 # =========================
 
 def load_recent_conversations():
@@ -116,9 +142,10 @@ def load_recent_conversations():
 
     conversation_text = ""
 
-    for row in rows:
+    for row in reversed(rows):
 
         conversation_text += f"""
+
 User: {row[0]}
 AI: {row[1]}
 """
