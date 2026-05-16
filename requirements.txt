@@ -4,3 +4,4 @@ pydantic==2.13.4
 groq==1.2.0
 requests==2.34.0
 python-multipart
+mysql-connector-python
