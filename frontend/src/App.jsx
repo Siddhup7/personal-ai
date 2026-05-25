@@ -1,10 +1,31 @@
-import { useState } from "react";
+import {
+    useState,
+    useRef,
+    useEffect
+} from "react";
 
 function App() {
 
-    const [message, setMessage] = useState("");
-    const [chat, setChat] = useState([]);
+    const [message, setMessage] =
+        useState("");
 
+    const [chat, setChat] =
+        useState([]);
+
+    const chatEndRef =
+        useRef(null);
+
+    // AUTO SCROLL
+    useEffect(() => {
+
+        chatEndRef.current
+        ?.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }, [chat]);
+
+    // SEND MESSAGE
     async function sendMessage() {
 
         if (message.trim() === "") {
@@ -16,54 +37,112 @@ function App() {
             text: message
         };
 
-        setChat(prev => [...prev, userMessage]);
+        setChat(prev => [
+            ...prev,
+            userMessage
+        ]);
 
-        const currentMessage = message;
+        const currentMessage =
+            message;
 
         setMessage("");
 
+        // TYPING
+        const typingMessage = {
+            sender: "AI",
+            text: "Typing..."
+        };
+
+        setChat(prev => [
+            ...prev,
+            typingMessage
+        ]);
+
         try {
 
-            const response = await fetch(
-                "https://personal-ai-k3rx.onrender.com/chat",
-                {
-                    method: "POST",
+            const response =
+                await fetch(
+                    "https://personal-ai-k3rx.onrender.com/chat",
+                    {
+                        method: "POST",
 
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                        headers: {
+                            "Content-Type":
+                            "application/json"
+                        },
 
-                    body: JSON.stringify({
-                        message: currentMessage
-                    })
-                }
+                        body: JSON.stringify({
+                            message:
+                            currentMessage
+                        })
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            // REMOVE TYPING
+            setChat(prev =>
+                prev.slice(0, -1)
             );
-
-            const data = await response.json();
 
             const aiMessage = {
                 sender: "AI",
                 text: data.response
             };
 
-            setChat(prev => [...prev, aiMessage]);
+            setChat(prev => [
+                ...prev,
+                aiMessage
+            ]);
 
         } catch (error) {
 
+            setChat(prev =>
+                prev.slice(0, -1)
+            );
+
             const errorMessage = {
                 sender: "AI",
-                text: "Backend connection failed."
+                text:
+                "Backend connection failed."
             };
 
-            setChat(prev => [...prev, errorMessage]);
+            setChat(prev => [
+                ...prev,
+                errorMessage
+            ]);
         }
     }
 
+    // ENTER KEY
     function handleEnter(event) {
 
         if (event.key === "Enter") {
+
             sendMessage();
         }
+    }
+
+    // VOICE INPUT
+    function startVoice() {
+
+        const recognition =
+            new window.webkitSpeechRecognition();
+
+        recognition.lang = "en-US";
+
+        recognition.onresult =
+        function(event) {
+
+            const text =
+                event.results[0][0]
+                .transcript;
+
+            setMessage(text);
+        };
+
+        recognition.start();
     }
 
     return (
@@ -88,7 +167,8 @@ function App() {
                     background: "#181818",
                     borderRadius: "20px",
                     padding: "25px",
-                    boxShadow: "0px 0px 30px rgba(0,0,0,0.5)"
+                    boxShadow:
+                    "0px 0px 30px rgba(0,0,0,0.5)"
                 }}
             >
 
@@ -109,42 +189,59 @@ function App() {
                         background: "#111",
                         borderRadius: "15px",
                         padding: "20px",
-                        border: "1px solid #333"
+                        border:
+                        "1px solid #333"
                     }}
                 >
 
                     {
-                        chat.map((msg, index) => (
+                        chat.map(
+                        (msg, index) => (
 
                             <div
                                 key={index}
-                                style={{
-                                    display: "flex",
-                                    justifyContent:
-                                        msg.sender === "You"
-                                        ? "flex-end"
-                                        : "flex-start",
 
-                                    marginBottom: "15px"
+                                style={{
+                                    display:
+                                    "flex",
+
+                                    justifyContent:
+                                    msg.sender === "You"
+                                    ? "flex-end"
+                                    : "flex-start",
+
+                                    marginBottom:
+                                    "15px"
                                 }}
                             >
 
                                 <div
                                     style={{
                                         background:
-                                            msg.sender === "You"
-                                            ? "#2563eb"
-                                            : "#2a2a2a",
+                                        msg.sender === "You"
+                                        ? "linear-gradient(45deg,#2563eb,#7c3aed)"
+                                        : "#2a2a2a",
 
-                                        padding: "15px",
-                                        borderRadius: "15px",
-                                        maxWidth: "70%",
-                                        fontSize: "18px",
-                                        lineHeight: "1.5"
+                                        padding:
+                                        "15px",
+
+                                        borderRadius:
+                                        "15px",
+
+                                        maxWidth:
+                                        "70%",
+
+                                        fontSize:
+                                        "18px",
+
+                                        lineHeight:
+                                        "1.5"
                                     }}
                                 >
 
-                                    <b>{msg.sender}</b>
+                                    <b>
+                                        {msg.sender}
+                                    </b>
 
                                     <br />
 
@@ -155,6 +252,10 @@ function App() {
                             </div>
                         ))
                     }
+
+                    <div
+                        ref={chatEndRef}
+                    ></div>
 
                 </div>
 
@@ -168,36 +269,85 @@ function App() {
 
                     <input
                         type="text"
-                        placeholder="Ask anything..."
+
+                        placeholder=
+                        "Ask anything..."
+
                         value={message}
+
                         onChange={(e) =>
-                            setMessage(e.target.value)
+                            setMessage(
+                                e.target.value
+                            )
                         }
-                        onKeyDown={handleEnter}
+
+                        onKeyDown={
+                            handleEnter
+                        }
 
                         style={{
                             flex: 1,
                             padding: "18px",
-                            borderRadius: "15px",
+                            borderRadius:
+                            "15px",
                             border: "none",
                             outline: "none",
-                            background: "#222",
+                            background:
+                            "#222",
                             color: "white",
                             fontSize: "17px"
                         }}
                     />
 
                     <button
+                        onClick={startVoice}
+
+                        style={{
+                            padding:
+                            "18px 22px",
+
+                            borderRadius:
+                            "15px",
+
+                            border: "none",
+
+                            background:
+                            "#16a34a",
+
+                            color: "white",
+
+                            fontSize:
+                            "18px",
+
+                            cursor:
+                            "pointer"
+                        }}
+                    >
+                        🎤
+                    </button>
+
+                    <button
                         onClick={sendMessage}
 
                         style={{
-                            padding: "18px 28px",
-                            borderRadius: "15px",
+                            padding:
+                            "18px 28px",
+
+                            borderRadius:
+                            "15px",
+
                             border: "none",
-                            background: "#2563eb",
+
+                            background:
+                            "linear-gradient(45deg,#2563eb,#7c3aed)",
+
                             color: "white",
-                            fontSize: "17px",
-                            cursor: "pointer"
+
+                            fontSize:
+                            "17px",
+
+                            cursor:
+                            "pointer"
                         }}
                     >
                         Send
