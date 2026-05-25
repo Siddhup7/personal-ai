@@ -14,9 +14,30 @@ function App() {
     const [chat, setChat] =
         useState([]);
 
+    const [history, setHistory] =
+        useState([]);
+
     const chatEndRef =
         useRef(null);
 
+    // LOAD HISTORY
+    useEffect(() => {
+
+        const savedHistory =
+            localStorage.getItem(
+                "chatHistory"
+            );
+
+        if (savedHistory) {
+
+            setHistory(
+                JSON.parse(savedHistory)
+            );
+        }
+
+    }, []);
+
+    // AUTO SCROLL
     useEffect(() => {
 
         chatEndRef.current
@@ -26,11 +47,41 @@ function App() {
 
     }, [chat]);
 
+    // NEW CHAT
     function newChat() {
+
+        if (chat.length > 0) {
+
+            const updatedHistory = [
+
+                ...history,
+
+                {
+                    title:
+                    chat[0]?.text ||
+                    "New Chat",
+
+                    messages: chat
+                }
+            ];
+
+            setHistory(
+                updatedHistory
+            );
+
+            localStorage.setItem(
+                "chatHistory",
+
+                JSON.stringify(
+                    updatedHistory
+                )
+            );
+        }
 
         setChat([]);
     }
 
+    // SEND MESSAGE
     async function sendMessage() {
 
         if (message.trim() === "") {
@@ -85,10 +136,12 @@ function App() {
             const data =
                 await response.json();
 
+            // REMOVE TYPING
             setChat(prev =>
                 prev.slice(0, -1)
             );
 
+            // AI TYPING EFFECT
             const fullText =
                 data.response;
 
@@ -137,6 +190,23 @@ function App() {
                 });
             }
 
+            // AI VOICE REPLY
+
+            const speech =
+                new SpeechSynthesisUtterance(
+                    fullText
+                );
+
+            speech.lang = "en-US";
+
+            speech.rate = 1;
+
+            speech.pitch = 1;
+
+            window.speechSynthesis.speak(
+                speech
+            );
+
         } catch (error) {
 
             setChat(prev =>
@@ -144,9 +214,12 @@ function App() {
             );
 
             setChat(prev => [
+
                 ...prev,
+
                 {
                     sender: "AI",
+
                     text:
                     "Backend connection failed."
                 }
@@ -154,6 +227,7 @@ function App() {
         }
     }
 
+    // ENTER KEY
     function handleEnter(event) {
 
         if (event.key === "Enter") {
@@ -162,6 +236,7 @@ function App() {
         }
     }
 
+    // VOICE INPUT
     function startVoice() {
 
         const recognition =
@@ -203,6 +278,7 @@ function App() {
                     },
 
                     particles: {
+
                         number: {
                             value: 60
                         },
@@ -242,10 +318,15 @@ function App() {
             <div
                 style={{
                     position: "relative",
+
                     zIndex: 10,
+
                     display: "flex",
+
                     minHeight: "100vh",
+
                     color: "white",
+
                     fontFamily: "Arial"
                 }}
             >
@@ -255,13 +336,19 @@ function App() {
                 <div
                     style={{
                         width: "260px",
+
                         background:
                         "rgba(17,17,17,0.8)",
+
                         backdropFilter:
                         "blur(12px)",
+
                         borderRight:
                         "1px solid rgba(255,255,255,0.1)",
-                        padding: "20px"
+
+                        padding: "20px",
+
+                        overflowY: "auto"
                     }}
                 >
 
@@ -274,19 +361,77 @@ function App() {
 
                         style={{
                             width: "100%",
+
                             padding: "15px",
+
                             marginTop: "20px",
+
                             border: "none",
+
                             borderRadius: "12px",
+
                             background:
                             "linear-gradient(45deg,#2563eb,#7c3aed)",
+
                             color: "white",
+
                             fontSize: "16px",
+
                             cursor: "pointer"
                         }}
                     >
                         + New Chat
                     </button>
+
+                    {/* HISTORY */}
+
+                    <div
+                        style={{
+                            marginTop: "25px"
+                        }}
+                    >
+
+                    {
+                        history.map(
+                        (item, index) => (
+
+                            <div
+
+                                key={index}
+
+                                onClick={() =>
+                                    setChat(
+                                        item.messages
+                                    )
+                                }
+
+                                style={{
+                                    padding: "12px",
+
+                                    marginBottom:
+                                    "10px",
+
+                                    background:
+                                    "#1f2937",
+
+                                    borderRadius:
+                                    "10px",
+
+                                    cursor:
+                                    "pointer",
+
+                                    fontSize:
+                                    "14px"
+                                }}
+                            >
+
+                                {item.title}
+
+                            </div>
+                        ))
+                    }
+
+                    </div>
 
                 </div>
 
@@ -295,37 +440,58 @@ function App() {
                 <div
                     style={{
                         flex: 1,
+
                         padding: "20px",
+
                         display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
+
+                        justifyContent:
+                        "center",
+
+                        alignItems:
+                        "center"
                     }}
                 >
 
                     <div
                         style={{
                             width: "100%",
+
                             maxWidth: "900px",
+
                             background:
                             "rgba(24,24,24,0.7)",
+
                             backdropFilter:
                             "blur(12px)",
+
                             border:
                             "1px solid rgba(255,255,255,0.1)",
-                            borderRadius: "20px",
+
+                            borderRadius:
+                            "20px",
+
                             padding: "25px"
                         }}
                     >
 
                         <h1
                             style={{
-                                textAlign: "center",
-                                marginBottom: "20px",
-                                fontSize: "48px",
+                                textAlign:
+                                "center",
+
+                                marginBottom:
+                                "20px",
+
+                                fontSize:
+                                "48px",
+
                                 background:
                                 "linear-gradient(45deg,#60a5fa,#a78bfa,#22c55e)",
+
                                 WebkitBackgroundClip:
                                 "text",
+
                                 WebkitTextFillColor:
                                 "transparent"
                             }}
@@ -336,11 +502,18 @@ function App() {
                         <div
                             style={{
                                 height: "500px",
-                                overflowY: "auto",
+
+                                overflowY:
+                                "auto",
+
                                 background:
                                 "rgba(17,17,17,0.7)",
-                                borderRadius: "15px",
-                                padding: "20px"
+
+                                borderRadius:
+                                "15px",
+
+                                padding:
+                                "20px"
                             }}
                         >
 
@@ -406,7 +579,9 @@ function App() {
                         <div
                             style={{
                                 display: "flex",
+
                                 marginTop: "20px",
+
                                 gap: "10px"
                             }}
                         >
@@ -431,14 +606,24 @@ function App() {
 
                                 style={{
                                     flex: 1,
-                                    padding: "18px",
+
+                                    padding:
+                                    "18px",
+
                                     borderRadius:
                                     "15px",
-                                    border: "none",
-                                    outline: "none",
+
+                                    border:
+                                    "none",
+
+                                    outline:
+                                    "none",
+
                                     background:
                                     "#222",
-                                    color: "white"
+
+                                    color:
+                                    "white"
                                 }}
                             />
 
@@ -448,12 +633,19 @@ function App() {
                                 style={{
                                     padding:
                                     "18px 22px",
+
                                     borderRadius:
                                     "15px",
-                                    border: "none",
+
+                                    border:
+                                    "none",
+
                                     background:
                                     "#16a34a",
-                                    color: "white",
+
+                                    color:
+                                    "white",
+
                                     cursor:
                                     "pointer"
                                 }}
@@ -467,12 +659,19 @@ function App() {
                                 style={{
                                     padding:
                                     "18px 28px",
+
                                     borderRadius:
                                     "15px",
-                                    border: "none",
+
+                                    border:
+                                    "none",
+
                                     background:
                                     "linear-gradient(45deg,#2563eb,#7c3aed)",
-                                    color: "white",
+
+                                    color:
+                                    "white",
+
                                     cursor:
                                     "pointer"
                                 }}
