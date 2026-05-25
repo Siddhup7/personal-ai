@@ -37,6 +37,16 @@ function App() {
 
     }, []);
 
+    // SAVE HISTORY
+    useEffect(() => {
+
+        localStorage.setItem(
+            "chatHistory",
+            JSON.stringify(history)
+        );
+
+    }, [history]);
+
     // AUTO SCROLL
     useEffect(() => {
 
@@ -52,30 +62,36 @@ function App() {
 
         if (chat.length > 0) {
 
-            const updatedHistory = [
+            // PREVENT DUPLICATES
 
-                ...history,
+            const alreadyExists =
+                history.some(
+                    item =>
+                        JSON.stringify(
+                            item.messages
+                        ) === JSON.stringify(chat)
+                );
 
-                {
-                    title:
-                    chat[0]?.text ||
-                    "New Chat",
+            if (!alreadyExists) {
 
-                    messages: chat
-                }
-            ];
+                const updatedHistory = [
 
-            setHistory(
-                updatedHistory
-            );
+                    {
+                        title:
+                        chat[0]?.text
+                        ?.slice(0, 30) ||
+                        "New Chat",
 
-            localStorage.setItem(
-                "chatHistory",
+                        messages: chat
+                    },
 
-                JSON.stringify(
+                    ...history
+                ];
+
+                setHistory(
                     updatedHistory
-                )
-            );
+                );
+            }
         }
 
         setChat([]);
