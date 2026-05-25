@@ -195,9 +195,14 @@ function App() {
         <div
             style={{
                 display: "flex",
-                background: "#0f0f0f",
+
+                background:
+                "linear-gradient(to bottom right,#050816,#111827,#0f172a)",
+
                 minHeight: "100vh",
+
                 color: "white",
+
                 fontFamily: "Arial"
             }}
         >
@@ -207,10 +212,17 @@ function App() {
             <div
                 style={{
                     width: "260px",
-                    background: "#111",
-                    padding: "20px",
+
+                    background:
+                    "rgba(17,17,17,0.8)",
+
+                    backdropFilter:
+                    "blur(12px)",
+
                     borderRight:
-                    "1px solid #222"
+                    "1px solid rgba(255,255,255,0.1)",
+
+                    padding: "20px"
                 }}
             >
 
@@ -223,15 +235,25 @@ function App() {
 
                     style={{
                         width: "100%",
+
                         padding: "15px",
+
                         marginTop: "20px",
+
                         border: "none",
+
                         borderRadius: "12px",
+
                         background:
                         "linear-gradient(45deg,#2563eb,#7c3aed)",
+
                         color: "white",
+
                         fontSize: "16px",
-                        cursor: "pointer"
+
+                        cursor: "pointer",
+
+                        transition: "0.3s"
                     }}
                 >
                     + New Chat
@@ -244,9 +266,13 @@ function App() {
             <div
                 style={{
                     flex: 1,
+
                     padding: "20px",
+
                     display: "flex",
+
                     justifyContent: "center",
+
                     alignItems: "center"
                 }}
             >
@@ -254,34 +280,67 @@ function App() {
                 <div
                     style={{
                         width: "100%",
+
                         maxWidth: "900px",
-                        background: "#181818",
+
+                        background:
+                        "rgba(24,24,24,0.7)",
+
+                        backdropFilter:
+                        "blur(12px)",
+
+                        border:
+                        "1px solid rgba(255,255,255,0.1)",
+
                         borderRadius: "20px",
+
                         padding: "25px",
+
                         boxShadow:
-                        "0px 0px 30px rgba(0,0,0,0.5)"
+                        "0px 0px 40px rgba(0,0,0,0.5)"
                     }}
                 >
 
                     <h1
                         style={{
                             textAlign: "center",
+
                             marginBottom: "20px",
-                            fontSize: "42px"
+
+                            fontSize: "48px",
+
+                            background:
+                            "linear-gradient(45deg,#60a5fa,#a78bfa,#22c55e)",
+
+                            WebkitBackgroundClip:
+                            "text",
+
+                            WebkitTextFillColor:
+                            "transparent",
+
+                            fontWeight: "bold",
+
+                            letterSpacing: "2px"
                         }}
                     >
-                        🔥 Siddhu Personal AI
+                        ⚡ Siddhu Personal AI
                     </h1>
 
                     <div
                         style={{
                             height: "500px",
+
                             overflowY: "auto",
-                            background: "#111",
+
+                            background:
+                            "rgba(17,17,17,0.7)",
+
                             borderRadius: "15px",
+
                             padding: "20px",
+
                             border:
-                            "1px solid #333"
+                            "1px solid rgba(255,255,255,0.1)"
                         }}
                     >
 
@@ -353,7 +412,9 @@ function App() {
                     <div
                         style={{
                             display: "flex",
+
                             marginTop: "20px",
+
                             gap: "10px"
                         }}
                     >
@@ -378,14 +439,21 @@ function App() {
 
                             style={{
                                 flex: 1,
+
                                 padding: "18px",
+
                                 borderRadius:
                                 "15px",
+
                                 border: "none",
+
                                 outline: "none",
+
                                 background:
                                 "#222",
+
                                 color: "white",
+
                                 fontSize: "17px"
                             }}
                         />
@@ -411,7 +479,10 @@ function App() {
                                 "18px",
 
                                 cursor:
-                                "pointer"
+                                "pointer",
+
+                                transition:
+                                "0.3s"
                             }}
                         >
                             🎤
@@ -438,7 +509,10 @@ function App() {
                                 "17px",
 
                                 cursor:
-                                "pointer"
+                                "pointer",
+
+                                transition:
+                                "0.3s"
                             }}
                         >
                             Send
