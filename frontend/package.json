@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+    "react-dom": "^19.2.6",
+    "react-tsparticles": "^2.12.2",
+    "tsparticles": "^4.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

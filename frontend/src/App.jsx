@@ -4,6 +4,8 @@ import {
     useEffect
 } from "react";
 
+import Particles from "react-tsparticles";
+
 function App() {
 
     const [message, setMessage] =
@@ -15,7 +17,6 @@ function App() {
     const chatEndRef =
         useRef(null);
 
-    // AUTO SCROLL
     useEffect(() => {
 
         chatEndRef.current
@@ -25,13 +26,11 @@ function App() {
 
     }, [chat]);
 
-    // NEW CHAT
     function newChat() {
 
         setChat([]);
     }
 
-    // SEND MESSAGE
     async function sendMessage() {
 
         if (message.trim() === "") {
@@ -53,7 +52,6 @@ function App() {
 
         setMessage("");
 
-        // TYPING
         const typingMessage = {
             sender: "AI",
             text: "Typing..."
@@ -87,12 +85,10 @@ function App() {
             const data =
                 await response.json();
 
-            // REMOVE TYPING
             setChat(prev =>
                 prev.slice(0, -1)
             );
 
-            // AI TYPING EFFECT
             const fullText =
                 data.response;
 
@@ -147,20 +143,17 @@ function App() {
                 prev.slice(0, -1)
             );
 
-            const errorMessage = {
-                sender: "AI",
-                text:
-                "Backend connection failed."
-            };
-
             setChat(prev => [
                 ...prev,
-                errorMessage
+                {
+                    sender: "AI",
+                    text:
+                    "Backend connection failed."
+                }
             ]);
         }
     }
 
-    // ENTER KEY
     function handleEnter(event) {
 
         if (event.key === "Enter") {
@@ -169,7 +162,6 @@ function App() {
         }
     }
 
-    // VOICE INPUT
     function startVoice() {
 
         const recognition =
@@ -194,329 +186,301 @@ function App() {
 
         <div
             style={{
-                display: "flex",
-
-                background:
-                "linear-gradient(to bottom right,#050816,#111827,#0f172a)",
-
-                minHeight: "100vh",
-
-                color: "white",
-
-                fontFamily: "Arial"
+                position: "relative",
+                overflow: "hidden",
+                minHeight: "100vh"
             }}
         >
 
-            {/* SIDEBAR */}
+            {/* PARTICLES */}
 
-            <div
-                style={{
-                    width: "260px",
+            <Particles
+                options={{
+                    background: {
+                        color: {
+                            value: "#050816"
+                        }
+                    },
 
-                    background:
-                    "rgba(17,17,17,0.8)",
+                    particles: {
+                        number: {
+                            value: 60
+                        },
 
-                    backdropFilter:
-                    "blur(12px)",
+                        color: {
+                            value: "#ffffff"
+                        },
 
-                    borderRight:
-                    "1px solid rgba(255,255,255,0.1)",
+                        links: {
+                            enable: true,
+                            color: "#ffffff",
+                            opacity: 0.1
+                        },
 
-                    padding: "20px"
+                        move: {
+                            enable: true,
+                            speed: 1
+                        },
+
+                        size: {
+                            value: 2
+                        },
+
+                        opacity: {
+                            value: 0.3
+                        }
+                    }
                 }}
-            >
 
-                <h2>
-                    🤖 Siddhu AI
-                </h2>
+                style={{
+                    position: "absolute"
+                }}
+            />
 
-                <button
-                    onClick={newChat}
-
-                    style={{
-                        width: "100%",
-
-                        padding: "15px",
-
-                        marginTop: "20px",
-
-                        border: "none",
-
-                        borderRadius: "12px",
-
-                        background:
-                        "linear-gradient(45deg,#2563eb,#7c3aed)",
-
-                        color: "white",
-
-                        fontSize: "16px",
-
-                        cursor: "pointer",
-
-                        transition: "0.3s"
-                    }}
-                >
-                    + New Chat
-                </button>
-
-            </div>
-
-            {/* MAIN CHAT */}
+            {/* MAIN UI */}
 
             <div
                 style={{
-                    flex: 1,
-
-                    padding: "20px",
-
+                    position: "relative",
+                    zIndex: 10,
                     display: "flex",
-
-                    justifyContent: "center",
-
-                    alignItems: "center"
+                    minHeight: "100vh",
+                    color: "white",
+                    fontFamily: "Arial"
                 }}
             >
+
+                {/* SIDEBAR */}
 
                 <div
                     style={{
-                        width: "100%",
-
-                        maxWidth: "900px",
-
+                        width: "260px",
                         background:
-                        "rgba(24,24,24,0.7)",
-
+                        "rgba(17,17,17,0.8)",
                         backdropFilter:
                         "blur(12px)",
-
-                        border:
+                        borderRight:
                         "1px solid rgba(255,255,255,0.1)",
-
-                        borderRadius: "20px",
-
-                        padding: "25px",
-
-                        boxShadow:
-                        "0px 0px 40px rgba(0,0,0,0.5)"
+                        padding: "20px"
                     }}
                 >
 
-                    <h1
+                    <h2>
+                        🤖 Siddhu AI
+                    </h2>
+
+                    <button
+                        onClick={newChat}
+
                         style={{
-                            textAlign: "center",
-
-                            marginBottom: "20px",
-
-                            fontSize: "48px",
-
+                            width: "100%",
+                            padding: "15px",
+                            marginTop: "20px",
+                            border: "none",
+                            borderRadius: "12px",
                             background:
-                            "linear-gradient(45deg,#60a5fa,#a78bfa,#22c55e)",
-
-                            WebkitBackgroundClip:
-                            "text",
-
-                            WebkitTextFillColor:
-                            "transparent",
-
-                            fontWeight: "bold",
-
-                            letterSpacing: "2px"
+                            "linear-gradient(45deg,#2563eb,#7c3aed)",
+                            color: "white",
+                            fontSize: "16px",
+                            cursor: "pointer"
                         }}
                     >
-                        ⚡ Siddhu Personal AI
-                    </h1>
+                        + New Chat
+                    </button>
+
+                </div>
+
+                {/* CHAT */}
+
+                <div
+                    style={{
+                        flex: 1,
+                        padding: "20px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}
+                >
 
                     <div
                         style={{
-                            height: "500px",
-
-                            overflowY: "auto",
-
+                            width: "100%",
+                            maxWidth: "900px",
                             background:
-                            "rgba(17,17,17,0.7)",
-
-                            borderRadius: "15px",
-
-                            padding: "20px",
-
+                            "rgba(24,24,24,0.7)",
+                            backdropFilter:
+                            "blur(12px)",
                             border:
-                            "1px solid rgba(255,255,255,0.1)"
+                            "1px solid rgba(255,255,255,0.1)",
+                            borderRadius: "20px",
+                            padding: "25px"
                         }}
                     >
 
-                        {
-                            chat.map(
-                            (msg, index) => (
+                        <h1
+                            style={{
+                                textAlign: "center",
+                                marginBottom: "20px",
+                                fontSize: "48px",
+                                background:
+                                "linear-gradient(45deg,#60a5fa,#a78bfa,#22c55e)",
+                                WebkitBackgroundClip:
+                                "text",
+                                WebkitTextFillColor:
+                                "transparent"
+                            }}
+                        >
+                            ⚡ Siddhu Personal AI
+                        </h1>
 
-                                <div
-                                    key={index}
+                        <div
+                            style={{
+                                height: "500px",
+                                overflowY: "auto",
+                                background:
+                                "rgba(17,17,17,0.7)",
+                                borderRadius: "15px",
+                                padding: "20px"
+                            }}
+                        >
 
-                                    style={{
-                                        display:
-                                        "flex",
-
-                                        justifyContent:
-                                        msg.sender === "You"
-                                        ? "flex-end"
-                                        : "flex-start",
-
-                                        marginBottom:
-                                        "15px"
-                                    }}
-                                >
+                            {
+                                chat.map(
+                                (msg, index) => (
 
                                     <div
+                                        key={index}
+
                                         style={{
-                                            background:
+                                            display:
+                                            "flex",
+
+                                            justifyContent:
                                             msg.sender === "You"
-                                            ? "linear-gradient(45deg,#2563eb,#7c3aed)"
-                                            : "#2a2a2a",
+                                            ? "flex-end"
+                                            : "flex-start",
 
-                                            padding:
-                                            "15px",
-
-                                            borderRadius:
-                                            "15px",
-
-                                            maxWidth:
-                                            "70%",
-
-                                            fontSize:
-                                            "18px",
-
-                                            lineHeight:
-                                            "1.5"
+                                            marginBottom:
+                                            "15px"
                                         }}
                                     >
 
-                                        <b>
-                                            {msg.sender}
-                                        </b>
+                                        <div
+                                            style={{
+                                                background:
+                                                msg.sender === "You"
+                                                ? "linear-gradient(45deg,#2563eb,#7c3aed)"
+                                                : "#2a2a2a",
 
-                                        <br />
+                                                padding:
+                                                "15px",
 
-                                        {msg.text}
+                                                borderRadius:
+                                                "15px",
+
+                                                maxWidth:
+                                                "70%"
+                                            }}
+                                        >
+
+                                            <b>
+                                                {msg.sender}
+                                            </b>
+
+                                            <br />
+
+                                            {msg.text}
+
+                                        </div>
 
                                     </div>
+                                ))
+                            }
 
-                                </div>
-                            ))
-                        }
+                            <div
+                                ref={chatEndRef}
+                            ></div>
+
+                        </div>
 
                         <div
-                            ref={chatEndRef}
-                        ></div>
-
-                    </div>
-
-                    <div
-                        style={{
-                            display: "flex",
-
-                            marginTop: "20px",
-
-                            gap: "10px"
-                        }}
-                    >
-
-                        <input
-                            type="text"
-
-                            placeholder=
-                            "Ask anything..."
-
-                            value={message}
-
-                            onChange={(e) =>
-                                setMessage(
-                                    e.target.value
-                                )
-                            }
-
-                            onKeyDown={
-                                handleEnter
-                            }
-
                             style={{
-                                flex: 1,
-
-                                padding: "18px",
-
-                                borderRadius:
-                                "15px",
-
-                                border: "none",
-
-                                outline: "none",
-
-                                background:
-                                "#222",
-
-                                color: "white",
-
-                                fontSize: "17px"
-                            }}
-                        />
-
-                        <button
-                            onClick={startVoice}
-
-                            style={{
-                                padding:
-                                "18px 22px",
-
-                                borderRadius:
-                                "15px",
-
-                                border: "none",
-
-                                background:
-                                "#16a34a",
-
-                                color: "white",
-
-                                fontSize:
-                                "18px",
-
-                                cursor:
-                                "pointer",
-
-                                transition:
-                                "0.3s"
+                                display: "flex",
+                                marginTop: "20px",
+                                gap: "10px"
                             }}
                         >
-                            🎤
-                        </button>
 
-                        <button
-                            onClick={sendMessage}
+                            <input
+                                type="text"
 
-                            style={{
-                                padding:
-                                "18px 28px",
+                                placeholder=
+                                "Ask anything..."
 
-                                borderRadius:
-                                "15px",
+                                value={message}
 
-                                border: "none",
+                                onChange={(e) =>
+                                    setMessage(
+                                        e.target.value
+                                    )
+                                }
 
-                                background:
-                                "linear-gradient(45deg,#2563eb,#7c3aed)",
+                                onKeyDown={
+                                    handleEnter
+                                }
 
-                                color: "white",
+                                style={{
+                                    flex: 1,
+                                    padding: "18px",
+                                    borderRadius:
+                                    "15px",
+                                    border: "none",
+                                    outline: "none",
+                                    background:
+                                    "#222",
+                                    color: "white"
+                                }}
+                            />
 
-                                fontSize:
-                                "17px",
+                            <button
+                                onClick={startVoice}
 
-                                cursor:
-                                "pointer",
+                                style={{
+                                    padding:
+                                    "18px 22px",
+                                    borderRadius:
+                                    "15px",
+                                    border: "none",
+                                    background:
+                                    "#16a34a",
+                                    color: "white",
+                                    cursor:
+                                    "pointer"
+                                }}
+                            >
+                                🎤
+                            </button>
 
-                                transition:
-                                "0.3s"
-                            }}
-                        >
-                            Send
-                        </button>
+                            <button
+                                onClick={sendMessage}
+
+                                style={{
+                                    padding:
+                                    "18px 28px",
+                                    borderRadius:
+                                    "15px",
+                                    border: "none",
+                                    background:
+                                    "linear-gradient(45deg,#2563eb,#7c3aed)",
+                                    color: "white",
+                                    cursor:
+                                    "pointer"
+                                }}
+                            >
+                                Send
+                            </button>
+
+                        </div>
 
                     </div>
 
