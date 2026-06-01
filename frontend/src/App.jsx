@@ -60,6 +60,16 @@ function App() {
 
     }, [chat]);
 
+    // WAKE BACKEND
+
+    useEffect(() => {
+
+        fetch(
+            "https://personal-ai-k3rx.onrender.com/"
+        );
+
+    }, []);
+
     // NEW CHAT
 
     function newChat() {
@@ -124,7 +134,8 @@ function App() {
 
         const typingMessage = {
             sender: "AI",
-            text: "Typing..."
+            text:
+            "⚡ Initializing AI Brain..."
         };
 
         setChat(prev => [
@@ -161,8 +172,6 @@ function App() {
                 prev.slice(0, -1)
             );
 
-            // AI RESPONSE
-
             const fullText =
                 data.response;
 
@@ -193,7 +202,7 @@ function App() {
                     resolve =>
                         setTimeout(
                             resolve,
-                            15
+                            12
                         )
                 );
 
@@ -213,7 +222,7 @@ function App() {
                 });
             }
 
-            // AI VOICE REPLY
+            // AI VOICE
 
             const speech =
                 new SpeechSynthesisUtterance(
@@ -346,7 +355,7 @@ function App() {
                     particles: {
 
                         number: {
-                            value: 60
+                            value: 70
                         },
 
                         color: {
@@ -356,7 +365,7 @@ function App() {
                         links: {
                             enable: true,
                             color: "#ffffff",
-                            opacity: 0.1
+                            opacity: 0.08
                         },
 
                         move: {
@@ -410,7 +419,7 @@ function App() {
                         "blur(12px)",
 
                         borderRight:
-                        "1px solid rgba(255,255,255,0.1)",
+                        "1px solid rgba(255,255,255,0.08)",
 
                         padding: "20px",
 
@@ -434,7 +443,7 @@ function App() {
 
                             border: "none",
 
-                            borderRadius: "12px",
+                            borderRadius: "14px",
 
                             background:
                             "linear-gradient(45deg,#2563eb,#7c3aed)",
@@ -443,7 +452,10 @@ function App() {
 
                             fontSize: "16px",
 
-                            cursor: "pointer"
+                            cursor: "pointer",
+
+                            transition:
+                            "0.3s"
                         }}
                     >
                         + New Chat
@@ -472,22 +484,28 @@ function App() {
                                 }
 
                                 style={{
-                                    padding: "12px",
+                                    padding: "14px",
 
                                     marginBottom:
-                                    "10px",
+                                    "12px",
 
                                     background:
-                                    "#1f2937",
+                                    "rgba(255,255,255,0.05)",
+
+                                    border:
+                                    "1px solid rgba(255,255,255,0.05)",
 
                                     borderRadius:
-                                    "10px",
+                                    "14px",
 
                                     cursor:
                                     "pointer",
 
                                     fontSize:
-                                    "14px"
+                                    "14px",
+
+                                    backdropFilter:
+                                    "blur(10px)"
                                 }}
                             >
 
@@ -523,23 +541,118 @@ function App() {
                         style={{
                             width: "100%",
 
-                            maxWidth: "900px",
+                            maxWidth: "950px",
 
                             background:
                             "rgba(24,24,24,0.7)",
 
                             backdropFilter:
-                            "blur(12px)",
+                            "blur(16px)",
 
                             border:
-                            "1px solid rgba(255,255,255,0.1)",
+                            "1px solid rgba(255,255,255,0.08)",
 
                             borderRadius:
-                            "20px",
+                            "24px",
 
-                            padding: "25px"
+                            padding: "25px",
+
+                            boxShadow:
+                            "0px 0px 60px rgba(59,130,246,0.15)"
                         }}
                     >
+
+                        {/* PREMIUM NAVBAR */}
+
+                        <div
+                            style={{
+                                display: "flex",
+
+                                justifyContent:
+                                "space-between",
+
+                                alignItems:
+                                "center",
+
+                                marginBottom:
+                                "20px",
+
+                                padding:
+                                "12px 20px",
+
+                                background:
+                                "rgba(255,255,255,0.05)",
+
+                                border:
+                                "1px solid rgba(255,255,255,0.08)",
+
+                                borderRadius:
+                                "16px",
+
+                                backdropFilter:
+                                "blur(12px)"
+                            }}
+                        >
+
+                            <div
+                                style={{
+                                    fontSize:
+                                    "18px",
+
+                                    fontWeight:
+                                    "bold"
+                                }}
+                            >
+                                ⚡ AI Dashboard
+                            </div>
+
+                            <div
+                                style={{
+                                    display:
+                                    "flex",
+
+                                    alignItems:
+                                    "center",
+
+                                    gap:
+                                    "10px"
+                                }}
+                            >
+
+                                <div
+                                    style={{
+                                        width:
+                                        "10px",
+
+                                        height:
+                                        "10px",
+
+                                        borderRadius:
+                                        "50%",
+
+                                        background:
+                                        "#22c55e",
+
+                                        boxShadow:
+                                        "0px 0px 10px #22c55e"
+                                    }}
+                                ></div>
+
+                                <span
+                                    style={{
+                                        fontSize:
+                                        "14px",
+
+                                        opacity:
+                                        0.8
+                                    }}
+                                >
+                                    AI Online
+                                </span>
+
+                            </div>
+
+                        </div>
 
                         <h1
                             style={{
@@ -550,7 +663,7 @@ function App() {
                                 "20px",
 
                                 fontSize:
-                                "48px",
+                                "52px",
 
                                 background:
                                 "linear-gradient(45deg,#60a5fa,#a78bfa,#22c55e)",
@@ -565,6 +678,8 @@ function App() {
                             ⚡ Siddhu Personal AI
                         </h1>
 
+                        {/* CHAT BOX */}
+
                         <div
                             style={{
                                 height: "500px",
@@ -576,10 +691,13 @@ function App() {
                                 "rgba(17,17,17,0.7)",
 
                                 borderRadius:
-                                "15px",
+                                "20px",
 
                                 padding:
-                                "20px"
+                                "20px",
+
+                                border:
+                                "1px solid rgba(255,255,255,0.05)"
                             }}
                         >
 
@@ -609,16 +727,19 @@ function App() {
                                                 background:
                                                 msg.sender === "You"
                                                 ? "linear-gradient(45deg,#2563eb,#7c3aed)"
-                                                : "#2a2a2a",
+                                                : "rgba(255,255,255,0.06)",
 
                                                 padding:
-                                                "15px",
+                                                "16px",
 
                                                 borderRadius:
-                                                "15px",
+                                                "18px",
 
                                                 maxWidth:
-                                                "70%"
+                                                "70%",
+
+                                                boxShadow:
+                                                "0px 0px 15px rgba(0,0,0,0.2)"
                                             }}
                                         >
 
@@ -641,6 +762,8 @@ function App() {
                             ></div>
 
                         </div>
+
+                        {/* INPUT */}
 
                         <div
                             style={{
@@ -677,19 +800,25 @@ function App() {
                                     "18px",
 
                                     borderRadius:
-                                    "15px",
+                                    "16px",
 
                                     border:
-                                    "none",
+                                    "1px solid rgba(255,255,255,0.05)",
 
                                     outline:
                                     "none",
 
                                     background:
-                                    "#222",
+                                    "rgba(255,255,255,0.05)",
 
                                     color:
-                                    "white"
+                                    "white",
+
+                                    fontSize:
+                                    "16px",
+
+                                    boxShadow:
+                                    "0px 0px 15px rgba(37,99,235,0.2)"
                                 }}
                             />
 
@@ -701,7 +830,7 @@ function App() {
                                     "18px 22px",
 
                                     borderRadius:
-                                    "15px",
+                                    "16px",
 
                                     border:
                                     "none",
@@ -713,7 +842,10 @@ function App() {
                                     "white",
 
                                     cursor:
-                                    "pointer"
+                                    "pointer",
+
+                                    fontSize:
+                                    "18px"
                                 }}
                             >
                                 🎤
@@ -727,7 +859,7 @@ function App() {
                                     "18px 28px",
 
                                     borderRadius:
-                                    "15px",
+                                    "16px",
 
                                     border:
                                     "none",
@@ -739,7 +871,13 @@ function App() {
                                     "white",
 
                                     cursor:
-                                    "pointer"
+                                    "pointer",
+
+                                    fontSize:
+                                    "16px",
+
+                                    transition:
+                                    "0.3s"
                                 }}
                             >
                                 Send
