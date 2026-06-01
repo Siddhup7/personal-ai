@@ -21,6 +21,7 @@ function App() {
         useRef(null);
 
     // LOAD HISTORY
+
     useEffect(() => {
 
         const savedHistory =
@@ -38,6 +39,7 @@ function App() {
     }, []);
 
     // SAVE HISTORY
+
     useEffect(() => {
 
         localStorage.setItem(
@@ -48,6 +50,7 @@ function App() {
     }, [history]);
 
     // AUTO SCROLL
+
     useEffect(() => {
 
         chatEndRef.current
@@ -58,11 +61,10 @@ function App() {
     }, [chat]);
 
     // NEW CHAT
+
     function newChat() {
 
         if (chat.length > 0) {
-
-            // PREVENT DUPLICATES
 
             const alreadyExists =
                 history.some(
@@ -98,6 +100,7 @@ function App() {
     }
 
     // SEND MESSAGE
+
     async function sendMessage() {
 
         if (message.trim() === "") {
@@ -153,11 +156,13 @@ function App() {
                 await response.json();
 
             // REMOVE TYPING
+
             setChat(prev =>
                 prev.slice(0, -1)
             );
 
-            // AI TYPING EFFECT
+            // AI RESPONSE
+
             const fullText =
                 data.response;
 
@@ -172,6 +177,8 @@ function App() {
                 ...prev,
                 aiMessage
             ]);
+
+            // TYPING EFFECT
 
             for (
                 let i = 0;
@@ -223,6 +230,47 @@ function App() {
                 speech
             );
 
+            // AUTO SAVE CHAT
+
+            setTimeout(() => {
+
+                const currentFullChat = [
+
+                    ...chat,
+
+                    userMessage,
+
+                    {
+                        sender: "AI",
+                        text: fullText
+                    }
+                ];
+
+                const updatedHistory = [
+
+                    {
+                        title:
+                        currentMessage
+                        .slice(0, 30),
+
+                        messages:
+                        currentFullChat
+                    },
+
+                    ...history.filter(
+                        item =>
+                            item.title !==
+                            currentMessage
+                            .slice(0, 30)
+                    )
+                ];
+
+                setHistory(
+                    updatedHistory
+                );
+
+            }, 500);
+
         } catch (error) {
 
             setChat(prev =>
@@ -244,6 +292,7 @@ function App() {
     }
 
     // ENTER KEY
+
     function handleEnter(event) {
 
         if (event.key === "Enter") {
@@ -253,6 +302,7 @@ function App() {
     }
 
     // VOICE INPUT
+
     function startVoice() {
 
         const recognition =
