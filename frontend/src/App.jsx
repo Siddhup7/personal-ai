@@ -293,6 +293,14 @@ function App() {
 
     return(
 
+        <>
+
+        {/* AURORA BACKGROUND */}
+
+        <div className="aurora aurora1"></div>
+        <div className="aurora aurora2"></div>
+        <div className="aurora aurora3"></div>
+
         <div
             style={{
                 position:"relative",
@@ -363,29 +371,30 @@ function App() {
                     sidebarOpen && (
 
                     <div
-                        className="fadeIn"
+                        className="
+                        fadeIn
+                        glass
+                        premiumGlow
+                        "
 
                         style={{
                             width:"280px",
 
-                            background:
-                            "rgba(17,17,17,0.8)",
-
-                            backdropFilter:
-                            "blur(14px)",
-
-                            borderRight:
-                            "1px solid rgba(255,255,255,0.05)",
-
                             padding:"20px",
 
-                            overflowY:"auto"
+                            overflowY:"auto",
+
+                            borderRight:
+                            "1px solid rgba(255,255,255,0.06)"
                         }}
                     >
 
                         <h2
+                            className="floatSlow"
+
                             style={{
-                                marginBottom:"20px"
+                                marginBottom:"20px",
+                                fontSize:"36px"
                             }}
                         >
                             🤖 Siddhu AI
@@ -395,23 +404,26 @@ function App() {
 
                             onClick={newChat}
 
-                            className="glow"
+                            className="
+                            premiumButton
+                            premiumGlow
+                            "
 
                             style={{
                                 width:"100%",
 
-                                padding:"16px",
+                                padding:"18px",
 
                                 border:"none",
 
-                                borderRadius:"16px",
+                                borderRadius:"18px",
 
                                 background:
                                 "linear-gradient(45deg,#2563eb,#7c3aed)",
 
                                 color:"white",
 
-                                fontSize:"16px",
+                                fontSize:"17px",
 
                                 cursor:"pointer",
 
@@ -447,7 +459,11 @@ function App() {
 
                                     key={index}
 
-                                    className="fadeIn"
+                                    className="
+                                    fadeIn
+                                    glass
+                                    premiumButton
+                                    "
 
                                     onClick={()=>
                                         setChat(
@@ -457,21 +473,13 @@ function App() {
 
                                     style={{
 
-                                        padding:"14px",
+                                        padding:"16px",
 
-                                        marginBottom:"12px",
+                                        marginBottom:"14px",
 
-                                        background:
-                                        "rgba(255,255,255,0.05)",
+                                        borderRadius:"18px",
 
-                                        border:
-                                        "1px solid rgba(255,255,255,0.05)",
-
-                                        borderRadius:"14px",
-
-                                        cursor:"pointer",
-
-                                        transition:"0.3s"
+                                        cursor:"pointer"
                                     }}
                                 >
 
@@ -499,30 +507,24 @@ function App() {
 
                         alignItems:"center",
 
-                        padding:"20px"
+                        padding:"25px"
                     }}
                 >
 
                     <div
-                        className="glow"
+                        className="
+                        glass
+                        premiumGlow
+                        "
 
                         style={{
                             width:"100%",
 
-                            maxWidth:"1000px",
+                            maxWidth:"1100px",
 
                             height:"92vh",
 
-                            background:
-                            "rgba(24,24,24,0.7)",
-
-                            backdropFilter:
-                            "blur(16px)",
-
-                            border:
-                            "1px solid rgba(255,255,255,0.06)",
-
-                            borderRadius:"28px",
+                            borderRadius:"32px",
 
                             display:"flex",
 
@@ -535,8 +537,10 @@ function App() {
                         {/* TOPBAR */}
 
                         <div
+                            className="glass"
+
                             style={{
-                                padding:"20px",
+                                padding:"22px",
 
                                 display:"flex",
 
@@ -580,10 +584,10 @@ function App() {
                                 </button>
 
                                 <h1
-                                    className="float"
+                                    className="floatSlow"
 
                                     style={{
-                                        fontSize:"46px",
+                                        fontSize:"52px",
 
                                         background:
                                         "linear-gradient(45deg,#60a5fa,#a78bfa,#22c55e)",
@@ -610,18 +614,18 @@ function App() {
 
                                 <div
                                     style={{
-                                        width:"10px",
-                                        height:"10px",
+                                        width:"12px",
+                                        height:"12px",
                                         borderRadius:"50%",
                                         background:"#22c55e",
 
                                         boxShadow:
-                                        "0px 0px 12px #22c55e"
+                                        "0px 0px 18px #22c55e"
                                     }}
                                 ></div>
 
                                 <span>
-                                    Online
+                                    AI Online
                                 </span>
 
                             </div>
@@ -636,7 +640,7 @@ function App() {
 
                                 overflowY:"auto",
 
-                                padding:"20px"
+                                padding:"25px"
                             }}
                         >
 
@@ -644,17 +648,20 @@ function App() {
                                 chat.length===0 && (
 
                                 <div
-                                    className="fadeIn"
+                                    className="
+                                    fadeIn
+                                    floatSlow
+                                    "
 
                                     style={{
                                         textAlign:"center",
-                                        marginTop:"80px"
+                                        marginTop:"100px"
                                     }}
                                 >
 
                                     <h1
                                         style={{
-                                            fontSize:"60px",
+                                            fontSize:"80px",
                                             marginBottom:"20px"
                                         }}
                                     >
@@ -663,20 +670,20 @@ function App() {
 
                                     <h2
                                         style={{
-                                            fontSize:"42px",
+                                            fontSize:"52px",
                                             marginBottom:"20px"
                                         }}
                                     >
-                                        Ask Anything
+                                        Premium AI Assistant
                                     </h2>
 
                                     <p
                                         style={{
                                             opacity:0.7,
-                                            marginBottom:"40px"
+                                            fontSize:"18px"
                                         }}
                                     >
-                                        Premium AI Assistant
+                                        Ask anything. Build anything.
                                     </p>
 
                                 </div>
@@ -701,12 +708,15 @@ function App() {
                                             ? "flex-end"
                                             : "flex-start",
 
-                                            marginBottom:"16px"
+                                            marginBottom:"20px"
                                         }}
                                     >
 
                                         <div
-                                            className="glow"
+                                            className="
+                                            glass
+                                            messageBubble
+                                            "
 
                                             style={{
                                                 background:
@@ -714,13 +724,15 @@ function App() {
                                                 ? "linear-gradient(45deg,#2563eb,#7c3aed)"
                                                 : "rgba(255,255,255,0.06)",
 
-                                                padding:"16px",
+                                                padding:"18px",
 
-                                                borderRadius:"18px",
+                                                borderRadius:"22px",
 
                                                 maxWidth:"75%",
 
-                                                lineHeight:"1.6"
+                                                lineHeight:"1.7",
+
+                                                fontSize:"17px"
                                             }}
                                         >
 
@@ -742,10 +754,17 @@ function App() {
                                 isThinking && (
 
                                 <div
-                                    className="fadeIn"
+                                    className="
+                                    fadeIn
+                                    glass
+                                    "
 
                                     style={{
-                                        marginTop:"10px"
+                                        width:"220px",
+
+                                        padding:"18px",
+
+                                        borderRadius:"18px"
                                     }}
                                 >
 
@@ -764,8 +783,10 @@ function App() {
                         {/* INPUT */}
 
                         <div
+                            className="glass"
+
                             style={{
-                                padding:"20px",
+                                padding:"22px",
 
                                 borderTop:
                                 "1px solid rgba(255,255,255,0.05)"
@@ -775,7 +796,7 @@ function App() {
                             <div
                                 style={{
                                     display:"flex",
-                                    gap:"10px"
+                                    gap:"12px"
                                 }}
                             >
 
@@ -798,43 +819,47 @@ function App() {
                                         handleEnter
                                     }
 
+                                    className="glass"
+
                                     style={{
                                         flex:1,
 
-                                        padding:"18px",
+                                        padding:"20px",
 
-                                        borderRadius:"18px",
+                                        borderRadius:"22px",
 
                                         border:
-                                        "1px solid rgba(255,255,255,0.05)",
-
-                                        background:
-                                        "rgba(255,255,255,0.05)",
+                                        "1px solid rgba(255,255,255,0.06)",
 
                                         color:"white",
 
                                         outline:"none",
 
-                                        fontSize:"16px"
+                                        fontSize:"17px",
+
+                                        background:
+                                        "rgba(255,255,255,0.04)"
                                     }}
                                 />
 
                                 <button
+                                    className="
+                                    premiumButton
+                                    glass
+                                    "
+
                                     style={{
-                                        width:"60px",
+                                        width:"65px",
 
                                         border:"none",
 
-                                        borderRadius:"18px",
-
-                                        background:
-                                        "#27272a",
+                                        borderRadius:"22px",
 
                                         color:"white",
 
                                         cursor:"pointer",
 
-                                        fontSize:"20px"
+                                        fontSize:"22px"
                                     }}
                                 >
 
@@ -846,12 +871,16 @@ function App() {
 
                                     onClick={startVoice}
 
+                                    className="
+                                    premiumButton
+                                    "
+
                                     style={{
-                                        width:"60px",
+                                        width:"65px",
 
                                         border:"none",
 
-                                        borderRadius:"18px",
+                                        borderRadius:"22px",
 
                                         background:
                                         isSpeaking
@@ -862,7 +891,7 @@ function App() {
 
                                         cursor:"pointer",
 
-                                        fontSize:"20px"
+                                        fontSize:"22px"
                                     }}
                                 >
 
@@ -878,14 +907,17 @@ function App() {
 
                                     onClick={sendMessage}
 
-                                    className="glow"
+                                    className="
+                                    premiumButton
+                                    premiumGlow
+                                    "
 
                                     style={{
-                                        width:"70px",
+                                        width:"80px",
 
                                         border:"none",
 
-                                        borderRadius:"18px",
+                                        borderRadius:"22px",
 
                                         background:
                                         "linear-gradient(45deg,#2563eb,#7c3aed)",
@@ -894,7 +926,7 @@ function App() {
 
                                         cursor:"pointer",
 
-                                        fontSize:"22px"
+                                        fontSize:"24px"
                                     }}
                                 >
 
@@ -913,6 +945,8 @@ function App() {
             </div>
 
         </div>
+
+        </>
     );
 }
 
