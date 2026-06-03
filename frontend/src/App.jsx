@@ -47,8 +47,6 @@ function App() {
     const chatEndRef =
     useRef(null);
 
-    // PARTICLES
-
     const particlesInit =
     async (engine) => {
 
@@ -168,7 +166,6 @@ function App() {
 
             setChat(prev=>[
                 ...prev,
-
                 {
                     sender:"AI",
                     text:fullText
@@ -202,13 +199,10 @@ function App() {
             setIsThinking(false);
 
             setChat(prev=>[
-
                 ...prev,
-
                 {
                     sender:"AI",
-                    text:
-                    "Backend failed."
+                    text:"Backend failed."
                 }
             ]);
         }
@@ -265,8 +259,8 @@ function App() {
         <div
             style={{
                 position:"relative",
-                minHeight:"100vh",
-                overflowX:"hidden"
+                height:"100vh",
+                overflow:"hidden"
             }}
         >
 
@@ -325,8 +319,10 @@ function App() {
                     position:"relative",
                     zIndex:10,
                     display:"flex",
-                    minHeight:"100vh",
-                    color:"white"
+                    width:"100%",
+                    height:"100vh",
+                    color:"white",
+                    overflow:"hidden"
                 }}
             >
 
@@ -343,8 +339,9 @@ function App() {
                         "
 
                         style={{
-                            width:"240px",
-                            padding:"20px",
+                            width:"220px",
+                            flexShrink:0,
+                            padding:"18px",
                             overflowY:"auto"
                         }}
                     >
@@ -354,7 +351,7 @@ function App() {
 
                             style={{
                                 marginBottom:"20px",
-                                fontSize:"30px",
+                                fontSize:"26px",
                                 fontWeight:"bold"
                             }}
                         >
@@ -369,7 +366,7 @@ function App() {
 
                             style={{
                                 width:"100%",
-                                padding:"15px",
+                                padding:"14px",
                                 border:"none",
                                 borderRadius:"18px",
 
@@ -402,12 +399,10 @@ function App() {
                 <div
                     style={{
                         flex:1,
-
                         display:"flex",
-
                         justifyContent:"center",
-
-                        padding:"20px"
+                        padding:"12px",
+                        overflow:"hidden"
                     }}
                 >
 
@@ -419,12 +414,11 @@ function App() {
 
                         style={{
                             width:"100%",
-                            maxWidth:"980px",
-                            minHeight:"100vh",
-                            borderRadius:"30px",
+                            maxWidth:"100%",
+                            height:"100vh",
+                            borderRadius:"28px",
 
                             display:"flex",
-
                             flexDirection:"column",
 
                             overflow:"hidden"
@@ -437,14 +431,16 @@ function App() {
                             className="superInput"
 
                             style={{
-                                padding:"18px",
+                                padding:"16px",
 
                                 display:"flex",
 
                                 justifyContent:
                                 "space-between",
 
-                                alignItems:"center"
+                                alignItems:"center",
+
+                                flexShrink:0
                             }}
                         >
 
@@ -478,9 +474,9 @@ function App() {
 
                                         fontSize:"20px",
 
-                                        width:"50px",
+                                        width:"48px",
 
-                                        height:"50px",
+                                        height:"48px",
 
                                         borderRadius:"14px"
                                     }}
@@ -494,7 +490,7 @@ function App() {
                                     className="floatSlow"
 
                                     style={{
-                                        fontSize:"38px",
+                                        fontSize:"34px",
 
                                         fontWeight:"bold",
 
@@ -547,7 +543,8 @@ function App() {
                             style={{
                                 flex:1,
                                 overflowY:"auto",
-                                padding:"24px"
+                                overflowX:"hidden",
+                                padding:"22px"
                             }}
                         >
 
@@ -562,13 +559,13 @@ function App() {
 
                                     style={{
                                         textAlign:"center",
-                                        marginTop:"90px"
+                                        marginTop:"80px"
                                     }}
                                 >
 
                                     <h1
                                         style={{
-                                            fontSize:"70px",
+                                            fontSize:"60px",
                                             marginBottom:"14px"
                                         }}
                                     >
@@ -644,7 +641,9 @@ function App() {
 
                                                 lineHeight:"1.7",
 
-                                                fontSize:"15px"
+                                                fontSize:"15px",
+
+                                                overflowWrap:"break-word"
                                             }}
                                         >
 
@@ -698,14 +697,15 @@ function App() {
                             className="superInput"
 
                             style={{
-                                padding:"18px"
+                                padding:"16px",
+                                flexShrink:0
                             }}
                         >
 
                             <div
                                 style={{
                                     display:"flex",
-                                    gap:"12px"
+                                    gap:"10px"
                                 }}
                             >
 
@@ -755,7 +755,8 @@ function App() {
                                     "
 
                                     style={{
-                                        width:"58px",
+                                        width:"56px",
+                                        minWidth:"56px",
 
                                         border:"none",
 
@@ -782,7 +783,8 @@ function App() {
                                     "
 
                                     style={{
-                                        width:"58px",
+                                        width:"56px",
+                                        minWidth:"56px",
 
                                         border:"none",
 
@@ -818,7 +820,8 @@ function App() {
                                     "
 
                                     style={{
-                                        width:"70px",
+                                        width:"68px",
+                                        minWidth:"68px",
 
                                         border:"none",
 
