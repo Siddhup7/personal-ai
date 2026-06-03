@@ -462,7 +462,7 @@ function App() {
                     style={{
                         flex:1,
                         display:"flex",
-                        justifyContent:"flex-start",
+                        justifyContent:"center",
                         padding:"12px",
                         overflow:"hidden"
                     }}
@@ -475,25 +475,28 @@ function App() {
                         "
 
                         style={{
-                            width:
-                            sidebarOpen
-                            ? "calc(100vw - 260px)"
-                            : "100%",
+
+                            flex:1,
+
+                            minWidth:0,
 
                             maxWidth:"1400px",
 
-                            height:"100vh",
+                            height:
+                            "calc(100vh - 24px)",
 
-                            borderRadius:"28px",
+                            borderRadius:"32px",
 
                             display:"flex",
+
                             flexDirection:"column",
 
                             overflow:"hidden",
 
-                            marginLeft:"0px",
+                            transition:"0.3s",
 
-                            transition:"0.3s"
+                            boxShadow:
+                            "0px 0px 40px rgba(59,130,246,0.08)"
                         }}
                     >
 
@@ -616,7 +619,7 @@ function App() {
                                 flex:1,
                                 overflowY:"auto",
                                 overflowX:"hidden",
-                                padding:"22px"
+                                padding:"28px"
                             }}
                         >
 
@@ -631,7 +634,7 @@ function App() {
 
                                     style={{
                                         textAlign:"center",
-                                        marginTop:"80px"
+                                        marginTop:"140px"
                                     }}
                                 >
 
