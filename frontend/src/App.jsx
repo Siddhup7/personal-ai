@@ -10,6 +10,9 @@ import {
     loadSlim
 } from "@tsparticles/slim";
 
+import ReactMarkdown
+from "react-markdown";
+
 import {
 
     FiSend,
@@ -44,7 +47,7 @@ function App() {
     const chatEndRef =
     useRef(null);
 
-    // PARTICLES INIT
+    // PARTICLES
 
     const particlesInit =
     async (engine) => {
@@ -163,74 +166,14 @@ function App() {
             const fullText =
             data.response;
 
-            let currentText = "";
-
-            const aiMessage = {
-
-                sender:"AI",
-                text:""
-            };
-
             setChat(prev=>[
                 ...prev,
-                aiMessage
+
+                {
+                    sender:"AI",
+                    text:fullText
+                }
             ]);
-
-            // TYPING EFFECT
-
-            for(
-                let i=0;
-                i<fullText.length;
-                i++
-            ){
-
-                currentText +=
-                fullText[i];
-
-                await new Promise(
-                    resolve =>
-                    setTimeout(
-                        resolve,
-                        8
-                    )
-                );
-
-                setChat(prev=>{
-
-                    const updated =
-                    [...prev];
-
-                    updated[
-                        updated.length-1
-                    ] = {
-
-                        sender:"AI",
-                        text:currentText
-                    };
-
-                    return updated;
-                });
-            }
-
-            // VOICE
-
-            const speech =
-            new SpeechSynthesisUtterance(
-                fullText
-            );
-
-            setIsSpeaking(true);
-
-            speech.onend = () => {
-
-                setIsSpeaking(false);
-            };
-
-            window.speechSynthesis.speak(
-                speech
-            );
-
-            // SAVE CHAT
 
             const updatedHistory = [
 
@@ -307,7 +250,7 @@ function App() {
 
         <>
 
-        {/* PREMIUM LIGHTS */}
+        {/* LIGHTS */}
 
         <div className="lightGlow light1"></div>
         <div className="lightGlow light2"></div>
@@ -323,7 +266,7 @@ function App() {
             style={{
                 position:"relative",
                 minHeight:"100vh",
-                overflow:"hidden"
+                overflowX:"hidden"
             }}
         >
 
@@ -346,7 +289,7 @@ function App() {
                     particles:{
 
                         number:{
-                            value:70
+                            value:55
                         },
 
                         color:{
@@ -369,7 +312,7 @@ function App() {
                         },
 
                         opacity:{
-                            value:0.3
+                            value:0.25
                         }
                     }
                 }}
@@ -400,8 +343,8 @@ function App() {
                         "
 
                         style={{
-                            width:"290px",
-                            padding:"24px",
+                            width:"240px",
+                            padding:"20px",
                             overflowY:"auto"
                         }}
                     >
@@ -410,8 +353,8 @@ function App() {
                             className="floatSlow"
 
                             style={{
-                                marginBottom:"24px",
-                                fontSize:"38px",
+                                marginBottom:"20px",
+                                fontSize:"30px",
                                 fontWeight:"bold"
                             }}
                         >
@@ -426,15 +369,15 @@ function App() {
 
                             style={{
                                 width:"100%",
-                                padding:"18px",
+                                padding:"15px",
                                 border:"none",
-                                borderRadius:"20px",
+                                borderRadius:"18px",
 
                                 background:
                                 "linear-gradient(45deg,#2563eb,#7c3aed)",
 
                                 color:"white",
-                                fontSize:"17px",
+                                fontSize:"15px",
                                 cursor:"pointer",
 
                                 display:"flex",
@@ -464,9 +407,7 @@ function App() {
 
                         justifyContent:"center",
 
-                        alignItems:"center",
-
-                        padding:"25px"
+                        padding:"20px"
                     }}
                 >
 
@@ -478,9 +419,9 @@ function App() {
 
                         style={{
                             width:"100%",
-                            maxWidth:"1250px",
-                            height:"94vh",
-                            borderRadius:"34px",
+                            maxWidth:"980px",
+                            minHeight:"100vh",
+                            borderRadius:"30px",
 
                             display:"flex",
 
@@ -496,7 +437,7 @@ function App() {
                             className="superInput"
 
                             style={{
-                                padding:"24px",
+                                padding:"18px",
 
                                 display:"flex",
 
@@ -511,7 +452,7 @@ function App() {
                                 style={{
                                     display:"flex",
                                     alignItems:"center",
-                                    gap:"15px"
+                                    gap:"14px"
                                 }}
                             >
 
@@ -535,13 +476,13 @@ function App() {
 
                                         cursor:"pointer",
 
-                                        fontSize:"24px",
+                                        fontSize:"20px",
 
-                                        width:"55px",
+                                        width:"50px",
 
-                                        height:"55px",
+                                        height:"50px",
 
-                                        borderRadius:"16px"
+                                        borderRadius:"14px"
                                     }}
                                 >
 
@@ -553,7 +494,7 @@ function App() {
                                     className="floatSlow"
 
                                     style={{
-                                        fontSize:"56px",
+                                        fontSize:"38px",
 
                                         fontWeight:"bold",
 
@@ -576,24 +517,24 @@ function App() {
                                 style={{
                                     display:"flex",
                                     alignItems:"center",
-                                    gap:"12px"
+                                    gap:"10px"
                                 }}
                             >
 
                                 <div
                                     style={{
-                                        width:"12px",
-                                        height:"12px",
+                                        width:"10px",
+                                        height:"10px",
                                         borderRadius:"50%",
                                         background:"#22c55e",
 
                                         boxShadow:
-                                        "0px 0px 20px #22c55e"
+                                        "0px 0px 14px #22c55e"
                                     }}
                                 ></div>
 
                                 <span>
-                                    AI Online
+                                    Online
                                 </span>
 
                             </div>
@@ -606,7 +547,7 @@ function App() {
                             style={{
                                 flex:1,
                                 overflowY:"auto",
-                                padding:"30px"
+                                padding:"24px"
                             }}
                         >
 
@@ -621,14 +562,14 @@ function App() {
 
                                     style={{
                                         textAlign:"center",
-                                        marginTop:"120px"
+                                        marginTop:"90px"
                                     }}
                                 >
 
                                     <h1
                                         style={{
-                                            fontSize:"100px",
-                                            marginBottom:"20px"
+                                            fontSize:"70px",
+                                            marginBottom:"14px"
                                         }}
                                     >
                                         ⚡
@@ -636,8 +577,8 @@ function App() {
 
                                     <h2
                                         style={{
-                                            fontSize:"58px",
-                                            marginBottom:"22px"
+                                            fontSize:"42px",
+                                            marginBottom:"16px"
                                         }}
                                     >
                                         Premium AI Assistant
@@ -646,7 +587,7 @@ function App() {
                                     <p
                                         style={{
                                             opacity:0.7,
-                                            fontSize:"20px"
+                                            fontSize:"18px"
                                         }}
                                     >
                                         Ask anything. Build anything.
@@ -674,7 +615,7 @@ function App() {
                                             ? "flex-end"
                                             : "flex-start",
 
-                                            marginBottom:"22px"
+                                            marginBottom:"18px"
                                         }}
                                     >
 
@@ -687,7 +628,7 @@ function App() {
                                                 background:
                                                 msg.sender==="You"
                                                 ? "linear-gradient(45deg,#2563eb,#7c3aed)"
-                                                : "rgba(255,255,255,0.06)",
+                                                : "rgba(255,255,255,0.05)",
 
                                                 backdropFilter:
                                                 "blur(18px)",
@@ -695,15 +636,15 @@ function App() {
                                                 border:
                                                 "1px solid rgba(255,255,255,0.06)",
 
-                                                padding:"20px",
+                                                padding:"16px",
 
-                                                borderRadius:"24px",
+                                                borderRadius:"20px",
 
-                                                maxWidth:"75%",
+                                                maxWidth:"72%",
 
-                                                lineHeight:"1.8",
+                                                lineHeight:"1.7",
 
-                                                fontSize:"17px"
+                                                fontSize:"15px"
                                             }}
                                         >
 
@@ -713,7 +654,9 @@ function App() {
 
                                             <br />
 
-                                            {msg.text}
+                                            <ReactMarkdown>
+                                                {msg.text}
+                                            </ReactMarkdown>
 
                                         </div>
 
@@ -731,9 +674,9 @@ function App() {
                                     "
 
                                     style={{
-                                        width:"230px",
-                                        padding:"20px",
-                                        borderRadius:"20px"
+                                        width:"190px",
+                                        padding:"16px",
+                                        borderRadius:"18px"
                                     }}
                                 >
 
@@ -755,14 +698,14 @@ function App() {
                             className="superInput"
 
                             style={{
-                                padding:"24px"
+                                padding:"18px"
                             }}
                         >
 
                             <div
                                 style={{
                                     display:"flex",
-                                    gap:"14px"
+                                    gap:"12px"
                                 }}
                             >
 
@@ -790,15 +733,15 @@ function App() {
                                     style={{
                                         flex:1,
 
-                                        padding:"22px",
+                                        padding:"16px",
 
-                                        borderRadius:"24px",
+                                        borderRadius:"20px",
 
                                         color:"white",
 
                                         outline:"none",
 
-                                        fontSize:"17px",
+                                        fontSize:"15px",
 
                                         background:
                                         "rgba(255,255,255,0.04)"
@@ -812,17 +755,17 @@ function App() {
                                     "
 
                                     style={{
-                                        width:"70px",
+                                        width:"58px",
 
                                         border:"none",
 
-                                        borderRadius:"24px",
+                                        borderRadius:"18px",
 
                                         color:"white",
 
                                         cursor:"pointer",
 
-                                        fontSize:"24px"
+                                        fontSize:"20px"
                                     }}
                                 >
 
@@ -839,11 +782,11 @@ function App() {
                                     "
 
                                     style={{
-                                        width:"70px",
+                                        width:"58px",
 
                                         border:"none",
 
-                                        borderRadius:"24px",
+                                        borderRadius:"18px",
 
                                         background:
                                         isSpeaking
@@ -854,7 +797,7 @@ function App() {
 
                                         cursor:"pointer",
 
-                                        fontSize:"24px"
+                                        fontSize:"20px"
                                     }}
                                 >
 
@@ -875,11 +818,11 @@ function App() {
                                     "
 
                                     style={{
-                                        width:"90px",
+                                        width:"70px",
 
                                         border:"none",
 
-                                        borderRadius:"24px",
+                                        borderRadius:"18px",
 
                                         background:
                                         "linear-gradient(45deg,#2563eb,#7c3aed)",
@@ -888,7 +831,7 @@ function App() {
 
                                         cursor:"pointer",
 
-                                        fontSize:"26px"
+                                        fontSize:"22px"
                                     }}
                                 >
 
