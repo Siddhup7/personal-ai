@@ -6,30 +6,50 @@ import {
 
 import Particles from "react-tsparticles";
 
+import {
+
+    FiSend,
+    FiMic,
+    FiPlus,
+    FiPaperclip,
+    FiVolume2,
+    FiMenu
+
+} from "react-icons/fi";
+
 function App() {
 
     const [message, setMessage] =
-        useState("");
+    useState("");
 
     const [chat, setChat] =
-        useState([]);
+    useState([]);
 
     const [history, setHistory] =
-        useState([]);
+    useState([]);
+
+    const [sidebarOpen, setSidebarOpen] =
+    useState(true);
+
+    const [isSpeaking, setIsSpeaking] =
+    useState(false);
+
+    const [isThinking, setIsThinking] =
+    useState(false);
 
     const chatEndRef =
-        useRef(null);
+    useRef(null);
 
     // LOAD HISTORY
 
     useEffect(() => {
 
         const savedHistory =
-            localStorage.getItem(
-                "chatHistory"
-            );
+        localStorage.getItem(
+            "chatHistory"
+        );
 
-        if (savedHistory) {
+        if(savedHistory){
 
             setHistory(
                 JSON.parse(savedHistory)
@@ -55,7 +75,7 @@ function App() {
 
         chatEndRef.current
         ?.scrollIntoView({
-            behavior: "smooth"
+            behavior:"smooth"
         });
 
     }, [chat]);
@@ -72,229 +92,168 @@ function App() {
 
     // NEW CHAT
 
-    function newChat() {
-
-        if (chat.length > 0) {
-
-            const alreadyExists =
-                history.some(
-                    item =>
-                        JSON.stringify(
-                            item.messages
-                        ) === JSON.stringify(chat)
-                );
-
-            if (!alreadyExists) {
-
-                const updatedHistory = [
-
-                    {
-                        title:
-                        chat[0]?.text
-                        ?.slice(0, 30) ||
-                        "New Chat",
-
-                        messages: chat
-                    },
-
-                    ...history
-                ];
-
-                setHistory(
-                    updatedHistory
-                );
-            }
-        }
+    function newChat(){
 
         setChat([]);
     }
 
     // SEND MESSAGE
 
-    async function sendMessage() {
+    async function sendMessage(){
 
-        if (message.trim() === "") {
+        if(message.trim()===""){
             return;
         }
 
         const userMessage = {
-            sender: "You",
-            text: message
+
+            sender:"You",
+            text:message
         };
 
-        setChat(prev => [
+        setChat(prev=>[
             ...prev,
             userMessage
         ]);
 
         const currentMessage =
-            message;
+        message;
 
         setMessage("");
 
-        const typingMessage = {
-            sender: "AI",
-            text:
-            "⚡ Initializing AI Brain..."
-        };
+        setIsThinking(true);
 
-        setChat(prev => [
-            ...prev,
-            typingMessage
-        ]);
-
-        try {
+        try{
 
             const response =
-                await fetch(
-                    "https://personal-ai-k3rx.onrender.com/chat",
-                    {
-                        method: "POST",
+            await fetch(
+                "https://personal-ai-k3rx.onrender.com/chat",
+                {
+                    method:"POST",
 
-                        headers: {
-                            "Content-Type":
-                            "application/json"
-                        },
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
 
-                        body: JSON.stringify({
-                            message:
-                            currentMessage
-                        })
-                    }
-                );
-
-            const data =
-                await response.json();
-
-            // REMOVE TYPING
-
-            setChat(prev =>
-                prev.slice(0, -1)
+                    body:JSON.stringify({
+                        message:
+                        currentMessage
+                    })
+                }
             );
 
+            const data =
+            await response.json();
+
+            setIsThinking(false);
+
             const fullText =
-                data.response;
+            data.response;
 
             let currentText = "";
 
             const aiMessage = {
-                sender: "AI",
-                text: ""
+
+                sender:"AI",
+                text:""
             };
 
-            setChat(prev => [
+            setChat(prev=>[
                 ...prev,
                 aiMessage
             ]);
 
             // TYPING EFFECT
 
-            for (
-                let i = 0;
-                i < fullText.length;
+            for(
+                let i=0;
+                i<fullText.length;
                 i++
-            ) {
+            ){
 
                 currentText +=
-                    fullText[i];
+                fullText[i];
 
                 await new Promise(
                     resolve =>
-                        setTimeout(
-                            resolve,
-                            12
-                        )
+                    setTimeout(
+                        resolve,
+                        8
+                    )
                 );
 
-                setChat(prev => {
+                setChat(prev=>{
 
                     const updated =
-                        [...prev];
+                    [...prev];
 
                     updated[
-                        updated.length - 1
+                        updated.length-1
                     ] = {
-                        sender: "AI",
-                        text: currentText
+
+                        sender:"AI",
+                        text:currentText
                     };
 
                     return updated;
                 });
             }
 
-            // AI VOICE
+            // VOICE
 
             const speech =
-                new SpeechSynthesisUtterance(
-                    fullText
-                );
+            new SpeechSynthesisUtterance(
+                fullText
+            );
 
-            speech.lang = "en-US";
+            setIsSpeaking(true);
 
-            speech.rate = 1;
+            speech.onend = () => {
 
-            speech.pitch = 1;
+                setIsSpeaking(false);
+            };
 
             window.speechSynthesis.speak(
                 speech
             );
 
-            // AUTO SAVE CHAT
+            // SAVE CHAT
 
-            setTimeout(() => {
+            const updatedHistory = [
 
-                const currentFullChat = [
+                {
+                    title:
+                    currentMessage
+                    .slice(0,30),
 
-                    ...chat,
+                    messages:[
+                        ...chat,
+                        userMessage,
+                        {
+                            sender:"AI",
+                            text:fullText
+                        }
+                    ]
+                },
 
-                    userMessage,
+                ...history
+            ];
 
-                    {
-                        sender: "AI",
-                        text: fullText
-                    }
-                ];
+            setHistory(updatedHistory);
 
-                const updatedHistory = [
+        }catch(error){
 
-                    {
-                        title:
-                        currentMessage
-                        .slice(0, 30),
+            setIsThinking(false);
 
-                        messages:
-                        currentFullChat
-                    },
-
-                    ...history.filter(
-                        item =>
-                            item.title !==
-                            currentMessage
-                            .slice(0, 30)
-                    )
-                ];
-
-                setHistory(
-                    updatedHistory
-                );
-
-            }, 500);
-
-        } catch (error) {
-
-            setChat(prev =>
-                prev.slice(0, -1)
-            );
-
-            setChat(prev => [
+            setChat(prev=>[
 
                 ...prev,
 
                 {
-                    sender: "AI",
-
+                    sender:"AI",
                     text:
-                    "Backend connection failed."
+                    "Backend failed."
                 }
             ]);
         }
@@ -302,9 +261,9 @@ function App() {
 
     // ENTER KEY
 
-    function handleEnter(event) {
+    function handleEnter(event){
 
-        if (event.key === "Enter") {
+        if(event.key==="Enter"){
 
             sendMessage();
         }
@@ -312,19 +271,19 @@ function App() {
 
     // VOICE INPUT
 
-    function startVoice() {
+    function startVoice(){
 
         const recognition =
-            new window.webkitSpeechRecognition();
+        new window.webkitSpeechRecognition();
 
-        recognition.lang = "en-US";
+        recognition.lang="en-US";
 
         recognition.onresult =
-        function(event) {
+        function(event){
 
             const text =
-                event.results[0][0]
-                .transcript;
+            event.results[0][0]
+            .transcript;
 
             setMessage(text);
         };
@@ -332,216 +291,227 @@ function App() {
         recognition.start();
     }
 
-    return (
+    return(
 
         <div
             style={{
-                position: "relative",
-                overflow: "hidden",
-                minHeight: "100vh"
+                position:"relative",
+                minHeight:"100vh",
+                overflow:"hidden"
             }}
         >
 
             {/* PARTICLES */}
 
             <Particles
+
                 options={{
-                    background: {
-                        color: {
-                            value: "#050816"
+
+                    background:{
+                        color:{
+                            value:"#050816"
                         }
                     },
 
-                    particles: {
+                    particles:{
 
-                        number: {
-                            value: 70
+                        number:{
+                            value:70
                         },
 
-                        color: {
-                            value: "#ffffff"
+                        color:{
+                            value:"#ffffff"
                         },
 
-                        links: {
-                            enable: true,
-                            color: "#ffffff",
-                            opacity: 0.08
+                        links:{
+                            enable:true,
+                            opacity:0.08,
+                            color:"#ffffff"
                         },
 
-                        move: {
-                            enable: true,
-                            speed: 1
+                        move:{
+                            enable:true,
+                            speed:1
                         },
 
-                        size: {
-                            value: 2
+                        size:{
+                            value:2
                         },
 
-                        opacity: {
-                            value: 0.3
+                        opacity:{
+                            value:0.3
                         }
                     }
                 }}
-
-                style={{
-                    position: "absolute"
-                }}
             />
 
-            {/* MAIN UI */}
+            {/* MAIN */}
 
             <div
                 style={{
-                    position: "relative",
-
-                    zIndex: 10,
-
-                    display: "flex",
-
-                    minHeight: "100vh",
-
-                    color: "white",
-
-                    fontFamily: "Arial"
+                    position:"relative",
+                    zIndex:10,
+                    display:"flex",
+                    minHeight:"100vh",
+                    color:"white"
                 }}
             >
 
                 {/* SIDEBAR */}
 
-                <div
-                    style={{
-                        width: "260px",
+                {
+                    sidebarOpen && (
 
-                        background:
-                        "rgba(17,17,17,0.8)",
-
-                        backdropFilter:
-                        "blur(12px)",
-
-                        borderRight:
-                        "1px solid rgba(255,255,255,0.08)",
-
-                        padding: "20px",
-
-                        overflowY: "auto"
-                    }}
-                >
-
-                    <h2>
-                        🤖 Siddhu AI
-                    </h2>
-
-                    <button
-                        onClick={newChat}
+                    <div
+                        className="fadeIn"
 
                         style={{
-                            width: "100%",
-
-                            padding: "15px",
-
-                            marginTop: "20px",
-
-                            border: "none",
-
-                            borderRadius: "14px",
+                            width:"280px",
 
                             background:
-                            "linear-gradient(45deg,#2563eb,#7c3aed)",
+                            "rgba(17,17,17,0.8)",
 
-                            color: "white",
+                            backdropFilter:
+                            "blur(14px)",
 
-                            fontSize: "16px",
+                            borderRight:
+                            "1px solid rgba(255,255,255,0.05)",
 
-                            cursor: "pointer",
+                            padding:"20px",
 
-                            transition:
-                            "0.3s"
-                        }}
-                    >
-                        + New Chat
-                    </button>
-
-                    {/* HISTORY */}
-
-                    <div
-                        style={{
-                            marginTop: "25px"
+                            overflowY:"auto"
                         }}
                     >
 
-                    {
-                        history.map(
-                        (item, index) => (
+                        <h2
+                            style={{
+                                marginBottom:"20px"
+                            }}
+                        >
+                            🤖 Siddhu AI
+                        </h2>
 
-                            <div
+                        <button
 
-                                key={index}
+                            onClick={newChat}
 
-                                onClick={() =>
-                                    setChat(
-                                        item.messages
-                                    )
-                                }
+                            className="glow"
 
-                                style={{
-                                    padding: "14px",
+                            style={{
+                                width:"100%",
 
-                                    marginBottom:
-                                    "12px",
+                                padding:"16px",
 
-                                    background:
-                                    "rgba(255,255,255,0.05)",
+                                border:"none",
 
-                                    border:
-                                    "1px solid rgba(255,255,255,0.05)",
+                                borderRadius:"16px",
 
-                                    borderRadius:
-                                    "14px",
+                                background:
+                                "linear-gradient(45deg,#2563eb,#7c3aed)",
 
-                                    cursor:
-                                    "pointer",
+                                color:"white",
 
-                                    fontSize:
-                                    "14px",
+                                fontSize:"16px",
 
-                                    backdropFilter:
-                                    "blur(10px)"
-                                }}
-                            >
+                                cursor:"pointer",
 
-                                {item.title}
+                                display:"flex",
 
-                            </div>
-                        ))
-                    }
+                                alignItems:"center",
+
+                                justifyContent:"center",
+
+                                gap:"10px"
+                            }}
+                        >
+
+                            <FiPlus />
+
+                            New Chat
+
+                        </button>
+
+                        {/* HISTORY */}
+
+                        <div
+                            style={{
+                                marginTop:"25px"
+                            }}
+                        >
+
+                        {
+                            history.map(
+                            (item,index)=>(
+
+                                <div
+
+                                    key={index}
+
+                                    className="fadeIn"
+
+                                    onClick={()=>
+                                        setChat(
+                                            item.messages
+                                        )
+                                    }
+
+                                    style={{
+
+                                        padding:"14px",
+
+                                        marginBottom:"12px",
+
+                                        background:
+                                        "rgba(255,255,255,0.05)",
+
+                                        border:
+                                        "1px solid rgba(255,255,255,0.05)",
+
+                                        borderRadius:"14px",
+
+                                        cursor:"pointer",
+
+                                        transition:"0.3s"
+                                    }}
+                                >
+
+                                    {item.title}
+
+                                </div>
+                            ))
+                        }
+
+                        </div>
 
                     </div>
+                    )
+                }
 
-                </div>
-
-                {/* CHAT */}
+                {/* CHAT AREA */}
 
                 <div
                     style={{
-                        flex: 1,
+                        flex:1,
 
-                        padding: "20px",
+                        display:"flex",
 
-                        display: "flex",
+                        justifyContent:"center",
 
-                        justifyContent:
-                        "center",
+                        alignItems:"center",
 
-                        alignItems:
-                        "center"
+                        padding:"20px"
                     }}
                 >
 
                     <div
-                        style={{
-                            width: "100%",
+                        className="glow"
 
-                            maxWidth: "950px",
+                        style={{
+                            width:"100%",
+
+                            maxWidth:"1000px",
+
+                            height:"92vh",
 
                             background:
                             "rgba(24,24,24,0.7)",
@@ -550,196 +520,207 @@ function App() {
                             "blur(16px)",
 
                             border:
-                            "1px solid rgba(255,255,255,0.08)",
+                            "1px solid rgba(255,255,255,0.06)",
 
-                            borderRadius:
-                            "24px",
+                            borderRadius:"28px",
 
-                            padding: "25px",
+                            display:"flex",
 
-                            boxShadow:
-                            "0px 0px 60px rgba(59,130,246,0.15)"
+                            flexDirection:"column",
+
+                            overflow:"hidden"
                         }}
                     >
 
-                        {/* PREMIUM NAVBAR */}
+                        {/* TOPBAR */}
 
                         <div
                             style={{
-                                display: "flex",
+                                padding:"20px",
+
+                                display:"flex",
 
                                 justifyContent:
                                 "space-between",
 
-                                alignItems:
-                                "center",
+                                alignItems:"center",
 
-                                marginBottom:
-                                "20px",
-
-                                padding:
-                                "12px 20px",
-
-                                background:
-                                "rgba(255,255,255,0.05)",
-
-                                border:
-                                "1px solid rgba(255,255,255,0.08)",
-
-                                borderRadius:
-                                "16px",
-
-                                backdropFilter:
-                                "blur(12px)"
+                                borderBottom:
+                                "1px solid rgba(255,255,255,0.05)"
                             }}
                         >
 
                             <div
                                 style={{
-                                    fontSize:
-                                    "18px",
-
-                                    fontWeight:
-                                    "bold"
+                                    display:"flex",
+                                    alignItems:"center",
+                                    gap:"15px"
                                 }}
                             >
-                                ⚡ AI Dashboard
+
+                                <button
+
+                                    onClick={()=>
+                                        setSidebarOpen(
+                                            !sidebarOpen
+                                        )
+                                    }
+
+                                    style={{
+                                        background:"none",
+                                        border:"none",
+                                        color:"white",
+                                        cursor:"pointer",
+                                        fontSize:"24px"
+                                    }}
+                                >
+
+                                    <FiMenu />
+
+                                </button>
+
+                                <h1
+                                    className="float"
+
+                                    style={{
+                                        fontSize:"46px",
+
+                                        background:
+                                        "linear-gradient(45deg,#60a5fa,#a78bfa,#22c55e)",
+
+                                        WebkitBackgroundClip:
+                                        "text",
+
+                                        WebkitTextFillColor:
+                                        "transparent"
+                                    }}
+                                >
+                                    ⚡ Siddhu AI
+                                </h1>
+
                             </div>
 
                             <div
                                 style={{
-                                    display:
-                                    "flex",
-
-                                    alignItems:
-                                    "center",
-
-                                    gap:
-                                    "10px"
+                                    display:"flex",
+                                    alignItems:"center",
+                                    gap:"10px"
                                 }}
                             >
 
                                 <div
                                     style={{
-                                        width:
-                                        "10px",
-
-                                        height:
-                                        "10px",
-
-                                        borderRadius:
-                                        "50%",
-
-                                        background:
-                                        "#22c55e",
+                                        width:"10px",
+                                        height:"10px",
+                                        borderRadius:"50%",
+                                        background:"#22c55e",
 
                                         boxShadow:
-                                        "0px 0px 10px #22c55e"
+                                        "0px 0px 12px #22c55e"
                                     }}
                                 ></div>
 
-                                <span
-                                    style={{
-                                        fontSize:
-                                        "14px",
-
-                                        opacity:
-                                        0.8
-                                    }}
-                                >
-                                    AI Online
+                                <span>
+                                    Online
                                 </span>
 
                             </div>
 
                         </div>
 
-                        <h1
-                            style={{
-                                textAlign:
-                                "center",
-
-                                marginBottom:
-                                "20px",
-
-                                fontSize:
-                                "52px",
-
-                                background:
-                                "linear-gradient(45deg,#60a5fa,#a78bfa,#22c55e)",
-
-                                WebkitBackgroundClip:
-                                "text",
-
-                                WebkitTextFillColor:
-                                "transparent"
-                            }}
-                        >
-                            ⚡ Siddhu Personal AI
-                        </h1>
-
-                        {/* CHAT BOX */}
+                        {/* CHAT */}
 
                         <div
                             style={{
-                                height: "500px",
+                                flex:1,
 
-                                overflowY:
-                                "auto",
+                                overflowY:"auto",
 
-                                background:
-                                "rgba(17,17,17,0.7)",
-
-                                borderRadius:
-                                "20px",
-
-                                padding:
-                                "20px",
-
-                                border:
-                                "1px solid rgba(255,255,255,0.05)"
+                                padding:"20px"
                             }}
                         >
 
                             {
+                                chat.length===0 && (
+
+                                <div
+                                    className="fadeIn"
+
+                                    style={{
+                                        textAlign:"center",
+                                        marginTop:"80px"
+                                    }}
+                                >
+
+                                    <h1
+                                        style={{
+                                            fontSize:"60px",
+                                            marginBottom:"20px"
+                                        }}
+                                    >
+                                        ⚡
+                                    </h1>
+
+                                    <h2
+                                        style={{
+                                            fontSize:"42px",
+                                            marginBottom:"20px"
+                                        }}
+                                    >
+                                        Ask Anything
+                                    </h2>
+
+                                    <p
+                                        style={{
+                                            opacity:0.7,
+                                            marginBottom:"40px"
+                                        }}
+                                    >
+                                        Premium AI Assistant
+                                    </p>
+
+                                </div>
+                                )
+                            }
+
+                            {
                                 chat.map(
-                                (msg, index) => (
+                                (msg,index)=>(
 
                                     <div
+
                                         key={index}
 
+                                        className="fadeIn"
+
                                         style={{
-                                            display:
-                                            "flex",
+                                            display:"flex",
 
                                             justifyContent:
-                                            msg.sender === "You"
+                                            msg.sender==="You"
                                             ? "flex-end"
                                             : "flex-start",
 
-                                            marginBottom:
-                                            "15px"
+                                            marginBottom:"16px"
                                         }}
                                     >
 
                                         <div
+                                            className="glow"
+
                                             style={{
                                                 background:
-                                                msg.sender === "You"
+                                                msg.sender==="You"
                                                 ? "linear-gradient(45deg,#2563eb,#7c3aed)"
                                                 : "rgba(255,255,255,0.06)",
 
-                                                padding:
-                                                "16px",
+                                                padding:"16px",
 
-                                                borderRadius:
-                                                "18px",
+                                                borderRadius:"18px",
 
-                                                maxWidth:
-                                                "70%",
+                                                maxWidth:"75%",
 
-                                                boxShadow:
-                                                "0px 0px 15px rgba(0,0,0,0.2)"
+                                                lineHeight:"1.6"
                                             }}
                                         >
 
@@ -757,6 +738,23 @@ function App() {
                                 ))
                             }
 
+                            {
+                                isThinking && (
+
+                                <div
+                                    className="fadeIn"
+
+                                    style={{
+                                        marginTop:"10px"
+                                    }}
+                                >
+
+                                    🤖 AI Thinking...
+
+                                </div>
+                                )
+                            }
+
                             <div
                                 ref={chatEndRef}
                             ></div>
@@ -767,121 +765,144 @@ function App() {
 
                         <div
                             style={{
-                                display: "flex",
+                                padding:"20px",
 
-                                marginTop: "20px",
-
-                                gap: "10px"
+                                borderTop:
+                                "1px solid rgba(255,255,255,0.05)"
                             }}
                         >
 
-                            <input
-                                type="text"
-
-                                placeholder=
-                                "Ask anything..."
-
-                                value={message}
-
-                                onChange={(e) =>
-                                    setMessage(
-                                        e.target.value
-                                    )
-                                }
-
-                                onKeyDown={
-                                    handleEnter
-                                }
-
+                            <div
                                 style={{
-                                    flex: 1,
-
-                                    padding:
-                                    "18px",
-
-                                    borderRadius:
-                                    "16px",
-
-                                    border:
-                                    "1px solid rgba(255,255,255,0.05)",
-
-                                    outline:
-                                    "none",
-
-                                    background:
-                                    "rgba(255,255,255,0.05)",
-
-                                    color:
-                                    "white",
-
-                                    fontSize:
-                                    "16px",
-
-                                    boxShadow:
-                                    "0px 0px 15px rgba(37,99,235,0.2)"
-                                }}
-                            />
-
-                            <button
-                                onClick={startVoice}
-
-                                style={{
-                                    padding:
-                                    "18px 22px",
-
-                                    borderRadius:
-                                    "16px",
-
-                                    border:
-                                    "none",
-
-                                    background:
-                                    "#16a34a",
-
-                                    color:
-                                    "white",
-
-                                    cursor:
-                                    "pointer",
-
-                                    fontSize:
-                                    "18px"
+                                    display:"flex",
+                                    gap:"10px"
                                 }}
                             >
-                                🎤
-                            </button>
 
-                            <button
-                                onClick={sendMessage}
+                                <input
 
-                                style={{
-                                    padding:
-                                    "18px 28px",
+                                    type="text"
 
-                                    borderRadius:
-                                    "16px",
+                                    placeholder=
+                                    "Ask anything..."
 
-                                    border:
-                                    "none",
+                                    value={message}
 
-                                    background:
-                                    "linear-gradient(45deg,#2563eb,#7c3aed)",
+                                    onChange={(e)=>
+                                        setMessage(
+                                            e.target.value
+                                        )
+                                    }
 
-                                    color:
-                                    "white",
+                                    onKeyDown={
+                                        handleEnter
+                                    }
 
-                                    cursor:
-                                    "pointer",
+                                    style={{
+                                        flex:1,
 
-                                    fontSize:
-                                    "16px",
+                                        padding:"18px",
 
-                                    transition:
-                                    "0.3s"
-                                }}
-                            >
-                                Send
-                            </button>
+                                        borderRadius:"18px",
+
+                                        border:
+                                        "1px solid rgba(255,255,255,0.05)",
+
+                                        background:
+                                        "rgba(255,255,255,0.05)",
+
+                                        color:"white",
+
+                                        outline:"none",
+
+                                        fontSize:"16px"
+                                    }}
+                                />
+
+                                <button
+                                    style={{
+                                        width:"60px",
+
+                                        border:"none",
+
+                                        borderRadius:"18px",
+
+                                        background:
+                                        "#27272a",
+
+                                        color:"white",
+
+                                        cursor:"pointer",
+
+                                        fontSize:"20px"
+                                    }}
+                                >
+
+                                    <FiPaperclip />
+
+                                </button>
+
+                                <button
+
+                                    onClick={startVoice}
+
+                                    style={{
+                                        width:"60px",
+
+                                        border:"none",
+
+                                        borderRadius:"18px",
+
+                                        background:
+                                        isSpeaking
+                                        ? "#dc2626"
+                                        : "#16a34a",
+
+                                        color:"white",
+
+                                        cursor:"pointer",
+
+                                        fontSize:"20px"
+                                    }}
+                                >
+
+                                    {
+                                        isSpeaking
+                                        ? <FiVolume2 />
+                                        : <FiMic />
+                                    }
+
+                                </button>
+
+                                <button
+
+                                    onClick={sendMessage}
+
+                                    className="glow"
+
+                                    style={{
+                                        width:"70px",
+
+                                        border:"none",
+
+                                        borderRadius:"18px",
+
+                                        background:
+                                        "linear-gradient(45deg,#2563eb,#7c3aed)",
+
+                                        color:"white",
+
+                                        cursor:"pointer",
+
+                                        fontSize:"22px"
+                                    }}
+                                >
+
+                                    <FiSend />
+
+                                </button>
+
+                            </div>
 
                         </div>
 
