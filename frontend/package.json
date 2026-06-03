@@ -10,9 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tsparticles/react": "^4.1.2",
+    "@tsparticles/slim": "^4.1.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-tsparticles": "^2.12.2",
     "tsparticles": "^4.0.5"
   },
   "devDependencies": {

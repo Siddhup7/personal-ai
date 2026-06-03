@@ -4,7 +4,11 @@ import {
     useEffect
 } from "react";
 
-import Particles from "react-tsparticles";
+import Particles from "@tsparticles/react";
+
+import {
+    loadSlim
+} from "@tsparticles/slim";
 
 import {
 
@@ -39,6 +43,14 @@ function App() {
 
     const chatEndRef =
     useRef(null);
+
+    // PARTICLES INIT
+
+    const particlesInit =
+    async (engine) => {
+
+        await loadSlim(engine);
+    };
 
     // LOAD HISTORY
 
@@ -319,6 +331,10 @@ function App() {
 
             <Particles
 
+                id="tsparticles"
+
+                init={particlesInit}
+
                 options={{
 
                     background:{
@@ -385,13 +401,8 @@ function App() {
 
                         style={{
                             width:"290px",
-
                             padding:"24px",
-
-                            overflowY:"auto",
-
-                            borderRight:
-                            "1px solid rgba(255,255,255,0.06)"
+                            overflowY:"auto"
                         }}
                     >
 
@@ -411,38 +422,25 @@ function App() {
 
                             onClick={newChat}
 
-                            className="
-                            superButton
-                            "
+                            className="superButton"
 
                             style={{
                                 width:"100%",
-
                                 padding:"18px",
-
                                 border:"none",
-
                                 borderRadius:"20px",
 
                                 background:
                                 "linear-gradient(45deg,#2563eb,#7c3aed)",
 
                                 color:"white",
-
                                 fontSize:"17px",
-
                                 cursor:"pointer",
 
                                 display:"flex",
-
                                 alignItems:"center",
-
                                 justifyContent:"center",
-
-                                gap:"10px",
-
-                                boxShadow:
-                                "0px 0px 25px rgba(59,130,246,0.25)"
+                                gap:"10px"
                             }}
                         >
 
@@ -451,56 +449,6 @@ function App() {
                             New Chat
 
                         </button>
-
-                        {/* HISTORY */}
-
-                        <div
-                            style={{
-                                marginTop:"30px"
-                            }}
-                        >
-
-                        {
-                            history.map(
-                            (item,index)=>(
-
-                                <div
-
-                                    key={index}
-
-                                    className="
-                                    fadeIn
-                                    superCard
-                                    superButton
-                                    "
-
-                                    onClick={()=>
-                                        setChat(
-                                            item.messages
-                                        )
-                                    }
-
-                                    style={{
-
-                                        padding:"16px",
-
-                                        marginBottom:"14px",
-
-                                        borderRadius:"18px",
-
-                                        cursor:"pointer",
-
-                                        fontSize:"15px"
-                                    }}
-                                >
-
-                                    {item.title}
-
-                                </div>
-                            ))
-                        }
-
-                        </div>
 
                     </div>
                     )
@@ -530,11 +478,8 @@ function App() {
 
                         style={{
                             width:"100%",
-
                             maxWidth:"1250px",
-
                             height:"94vh",
-
                             borderRadius:"34px",
 
                             display:"flex",
@@ -558,10 +503,7 @@ function App() {
                                 justifyContent:
                                 "space-between",
 
-                                alignItems:"center",
-
-                                borderBottom:
-                                "1px solid rgba(255,255,255,0.05)"
+                                alignItems:"center"
                             }}
                         >
 
@@ -650,11 +592,7 @@ function App() {
                                     }}
                                 ></div>
 
-                                <span
-                                    style={{
-                                        fontSize:"16px"
-                                    }}
-                                >
+                                <span>
                                     AI Online
                                 </span>
 
@@ -667,9 +605,7 @@ function App() {
                         <div
                             style={{
                                 flex:1,
-
                                 overflowY:"auto",
-
                                 padding:"30px"
                             }}
                         >
@@ -701,8 +637,7 @@ function App() {
                                     <h2
                                         style={{
                                             fontSize:"58px",
-                                            marginBottom:"22px",
-                                            fontWeight:"bold"
+                                            marginBottom:"22px"
                                         }}
                                     >
                                         Premium AI Assistant
@@ -768,10 +703,7 @@ function App() {
 
                                                 lineHeight:"1.8",
 
-                                                fontSize:"17px",
-
-                                                boxShadow:
-                                                "0px 0px 25px rgba(255,255,255,0.04)"
+                                                fontSize:"17px"
                                             }}
                                         >
 
@@ -800,9 +732,7 @@ function App() {
 
                                     style={{
                                         width:"230px",
-
                                         padding:"20px",
-
                                         borderRadius:"20px"
                                     }}
                                 >
@@ -825,10 +755,7 @@ function App() {
                             className="superInput"
 
                             style={{
-                                padding:"24px",
-
-                                borderTop:
-                                "1px solid rgba(255,255,255,0.05)"
+                                padding:"24px"
                             }}
                         >
 
@@ -927,10 +854,7 @@ function App() {
 
                                         cursor:"pointer",
 
-                                        fontSize:"24px",
-
-                                        boxShadow:
-                                        "0px 0px 20px rgba(34,197,94,0.3)"
+                                        fontSize:"24px"
                                     }}
                                 >
 
@@ -964,10 +888,7 @@ function App() {
 
                                         cursor:"pointer",
 
-                                        fontSize:"26px",
-
-                                        boxShadow:
-                                        "0px 0px 30px rgba(59,130,246,0.3)"
+                                        fontSize:"26px"
                                     }}
                                 >
 
