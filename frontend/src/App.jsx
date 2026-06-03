@@ -47,6 +47,8 @@ function App() {
     const chatEndRef =
     useRef(null);
 
+    // PARTICLES
+
     const particlesInit =
     async (engine) => {
 
@@ -328,23 +330,37 @@ function App() {
 
                 {/* SIDEBAR */}
 
-                {
-                    sidebarOpen && (
+                <div
+                    className="
+                    fadeIn
+                    superCard
+                    neonBorder
+                    "
 
-                    <div
-                        className="
-                        fadeIn
-                        superCard
-                        neonBorder
-                        "
+                    style={{
 
-                        style={{
-                            width:"220px",
-                            flexShrink:0,
-                            padding:"18px",
-                            overflowY:"auto"
-                        }}
-                    >
+                        width:
+                        sidebarOpen
+                        ? "220px"
+                        : "0px",
+
+                        flexShrink:0,
+
+                        padding:
+                        sidebarOpen
+                        ? "18px"
+                        : "0px",
+
+                        overflow:"hidden",
+
+                        transition:"0.3s"
+                    }}
+                >
+
+                    {
+                        sidebarOpen && (
+
+                        <>
 
                         <h2
                             className="floatSlow"
@@ -390,9 +406,55 @@ function App() {
 
                         </button>
 
-                    </div>
-                    )
-                }
+                        {/* HISTORY */}
+
+                        <div
+                            style={{
+                                marginTop:"20px"
+                            }}
+                        >
+
+                            {
+                                history.map(
+                                (item,index)=>(
+
+                                    <div
+
+                                        key={index}
+
+                                        onClick={()=>
+                                            setChat(
+                                                item.messages
+                                            )
+                                        }
+
+                                        className="
+                                        superCard
+                                        superButton
+                                        "
+
+                                        style={{
+                                            padding:"14px",
+                                            borderRadius:"16px",
+                                            marginBottom:"12px",
+                                            cursor:"pointer",
+                                            fontSize:"14px"
+                                        }}
+                                    >
+
+                                        {item.title}
+
+                                    </div>
+                                ))
+                            }
+
+                        </div>
+
+                        </>
+                        )
+                    }
+
+                </div>
 
                 {/* CHAT AREA */}
 
@@ -400,7 +462,7 @@ function App() {
                     style={{
                         flex:1,
                         display:"flex",
-                        justifyContent:"center",
+                        justifyContent:"flex-start",
                         padding:"12px",
                         overflow:"hidden"
                     }}
@@ -413,15 +475,25 @@ function App() {
                         "
 
                         style={{
-                            width:"100%",
-                            maxWidth:"100%",
+                            width:
+                            sidebarOpen
+                            ? "calc(100vw - 260px)"
+                            : "100%",
+
+                            maxWidth:"1400px",
+
                             height:"100vh",
+
                             borderRadius:"28px",
 
                             display:"flex",
                             flexDirection:"column",
 
-                            overflow:"hidden"
+                            overflow:"hidden",
+
+                            marginLeft:"0px",
+
+                            transition:"0.3s"
                         }}
                     >
 
