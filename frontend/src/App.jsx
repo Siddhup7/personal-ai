@@ -261,7 +261,7 @@ function App() {
         <div
             style={{
                 position:"relative",
-                height:"100vh",
+                height:"100dvh",
                 overflow:"hidden"
             }}
         >
@@ -322,7 +322,7 @@ function App() {
                     zIndex:10,
                     display:"flex",
                     width:"100%",
-                    height:"100vh",
+                    height:"100dvh",
                     color:"white",
                     overflow:"hidden"
                 }}
@@ -614,6 +614,8 @@ function App() {
                         <div
                             style={{
                                 flex:1,
+                                display:"flex",
+                                flexDirection:"column",
                                 overflowY:"auto",
                                 overflowX:"hidden",
                                 padding:"28px"
@@ -630,8 +632,12 @@ function App() {
                                     "
 
                                     style={{
-                                        textAlign:"center",
-                                        marginTop:"40px"
+                                        flex:1,
+                                        display:"flex",
+                                        flexDirection:"column",
+                                        justifyContent:"center",
+                                        alignItems:"center",
+                                        textAlign:"center"
                                     }}
                                 >
 
