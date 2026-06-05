@@ -463,7 +463,7 @@ function App() {
                         flex:1,
                         display:"flex",
                         justifyContent:"center",
-                        padding:"12px",
+                        padding:"18px",
                         overflow:"hidden"
                     }}
                 >
@@ -480,10 +480,10 @@ function App() {
 
                             minWidth:0,
 
-                            maxWidth:"1400px",
+                            maxWidth:"1200px",
 
                             height:
-                            "calc(100vh - 24px)",
+                            "95vh",
 
                             borderRadius:"32px",
 
@@ -634,7 +634,7 @@ function App() {
 
                                     style={{
                                         textAlign:"center",
-                                        marginTop:"140px"
+                                        marginTop:"110px"
                                     }}
                                 >
 
