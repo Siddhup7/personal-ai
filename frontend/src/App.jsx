@@ -480,7 +480,7 @@ function App() {
                             width:"100%",
                             maxWidth:"100%",
                             minWidth:0,
-                            height:"100%",
+                            height:"calc(100dvh - 16px)",
 
                             borderRadius:"32px",
 
@@ -615,7 +615,8 @@ function App() {
                             style={{
                                 flex:1,
                                 display:"flex",
-                                flexDirection:"column",
+                                justifyContent:"center",
+                                alignItems:"center",
                                 overflowY:"auto",
                                 overflowX:"hidden",
                                 padding:"28px"
@@ -626,10 +627,7 @@ function App() {
                                 chat.length===0 && (
 
                                 <div
-                                    className="
-                                    fadeIn
-                                    floatSlow
-                                    "
+                                    className="fadeIn"
 
                                     style={{
                                         flex:1,
