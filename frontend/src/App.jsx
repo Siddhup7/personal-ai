@@ -341,7 +341,7 @@ function App() {
 
                         width:
                         sidebarOpen
-                        ? "220px"
+                        ? "280px"
                         : "0px",
 
                         flexShrink:0,
@@ -463,7 +463,7 @@ function App() {
                         flex:1,
                         display:"flex",
                         justifyContent:"center",
-                        padding:"18px",
+                        padding:"8px",
                         overflow:"hidden"
                     }}
                 >
@@ -477,13 +477,10 @@ function App() {
                         style={{
 
                             flex:1,
-
+                            width:"100%",
+                            maxWidth:"100%",
                             minWidth:0,
-
-                            maxWidth:"1200px",
-
-                            height:
-                            "95vh",
+                            height:"100%",
 
                             borderRadius:"32px",
 
@@ -634,7 +631,7 @@ function App() {
 
                                     style={{
                                         textAlign:"center",
-                                        marginTop:"110px"
+                                        marginTop:"40px"
                                     }}
                                 >
 
