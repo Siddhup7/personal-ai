@@ -261,7 +261,7 @@ function App() {
         <div
             style={{
                 position:"relative",
-                height:"100dvh",
+                height:"100vh",
                 overflow:"hidden"
             }}
         >
@@ -322,7 +322,7 @@ function App() {
                     zIndex:10,
                     display:"flex",
                     width:"100%",
-                    height:"100dvh",
+                    height:"100vh",
                     color:"white",
                     overflow:"hidden"
                 }}
@@ -341,7 +341,7 @@ function App() {
 
                         width:
                         sidebarOpen
-                        ? "280px"
+                        ? "330px"
                         : "0px",
 
                         flexShrink:0,
@@ -463,8 +463,9 @@ function App() {
                         flex:1,
                         display:"flex",
                         justifyContent:"center",
-                        padding:"8px",
-                        overflow:"hidden"
+                        padding:"0px",
+                        overflow:"hidden",
+                        minWidth:0
                     }}
                 >
 
@@ -480,7 +481,7 @@ function App() {
                             width:"100%",
                             maxWidth:"100%",
                             minWidth:0,
-                            height:"calc(100dvh - 16px)",
+                            height:"100vh",
 
                             borderRadius:"32px",
 
@@ -614,9 +615,6 @@ function App() {
                         <div
                             style={{
                                 flex:1,
-                                display:"flex",
-                                justifyContent:"center",
-                                alignItems:"center",
                                 overflowY:"auto",
                                 overflowX:"hidden",
                                 padding:"28px"
@@ -630,12 +628,8 @@ function App() {
                                     className="fadeIn"
 
                                     style={{
-                                        flex:1,
-                                        display:"flex",
-                                        flexDirection:"column",
-                                        justifyContent:"center",
-                                        alignItems:"center",
-                                        textAlign:"center"
+                                        textAlign:"center",
+                                        marginTop:"120px"
                                     }}
                                 >
 
